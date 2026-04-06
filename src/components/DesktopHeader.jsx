@@ -130,9 +130,11 @@ function DesktopHeader({ onVirtualCricketClick }) {
       <div className="top">
         <div className="header full-wrap" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-            <h1><Link to="/">SKYEXCHANGE</Link></h1>
-            <div id="searchWrap" className="search-wrap" style={{ display: 'block', margin: 0 }}>
-              <div>
+            <h1 style={{ margin: 0, display: 'flex', alignItems: 'center' }}>
+              <Link to="/">SKYEXCHANGE</Link>
+            </h1>
+            <div id="searchWrap" className="search-wrap" style={{ display: 'flex', alignItems: 'center', margin: 0, height: '100%', position: 'relative' }}>
+              <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
                 <input
                   id="searchInput"
                   className="search-input form-control form-control-sm"
@@ -151,7 +153,7 @@ function DesktopHeader({ onVirtualCricketClick }) {
                 ></button>
               </div>
               {(showSearchResults || searchLoading) && (
-                <div id="searchResult" className="suggestion-wrap" style={{ display: 'block', maxHeight: '400px', overflowY: 'auto' }}>
+                <div id="searchResult" className="suggestion-wrap" style={{ display: 'block', maxHeight: '400px', overflowY: 'auto', position: 'absolute', top: '100%', left: 0, width: '100%', zIndex: 1100 }}>
                   <ul id="searchList">
                     {searchLoading && <li style={{ padding: '10px', color: '#fff' }}>Searching...</li>}
                     {!searchLoading && searchResults.length === 0 && searchInput.length >= 3 && (
@@ -189,9 +191,30 @@ function DesktopHeader({ onVirtualCricketClick }) {
               <li>
                 <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
               </li>
-              <li>
-                <input type="text" placeholder="Validation" value={validationInput} onChange={(e) => setValidationInput(e.target.value)} />
-                <span style={{ position: 'absolute', color: '#000', fontWeight: 'bold', fontSize: '18px', top: '30px', right: '195px' }}>{validationCode}</span>
+              <li style={{ position: 'relative' }}>
+                <input 
+                  type="text" 
+                  placeholder="Validation" 
+                  value={validationInput} 
+                  onChange={(e) => setValidationInput(e.target.value)} 
+                  style={{ paddingRight: '60px' }}
+                />
+                <span style={{ 
+                  position: 'absolute', 
+                  color: '#000', 
+                  fontWeight: 'bold', 
+                  fontSize: '14px', 
+                  top: '50%', 
+                  right: '10px', 
+                  transform: 'translateY(-50%)',
+                  pointerEvents: 'none',
+                  background: '#eee',
+                  padding: '2px 4px',
+                  borderRadius: '2px',
+                  letterSpacing: '1px'
+                }}>
+                  {validationCode}
+                </span>
               </li>
               <li className="li-login">
                 <a className="btn-login" onClick={validateLogin} style={{ cursor: 'pointer' }}>{loading ? '...' : 'Login'}<img className="icon-login" src="/images/transparent.gif" alt="" /></a>
