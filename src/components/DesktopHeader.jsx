@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { authController, userController } from '../controllers';
+import { authController, userController, marketController } from '../controllers';
 import { useAuthStore } from '../store/authStore';
 
 function DesktopHeader({ onVirtualCricketClick }) {
@@ -10,6 +10,10 @@ function DesktopHeader({ onVirtualCricketClick }) {
   const [validationInput, setValidationInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [balanceData, setBalanceData] = useState({ balance: '0', exposure: '0' });
+  const [searchInput, setSearchInput] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [searchLoading, setSearchLoading] = useState(false);
+  const [showSearchResults, setShowSearchResults] = useState(false);
   
   const location = useLocation();
   const navigate = useNavigate();
@@ -32,6 +36,32 @@ function DesktopHeader({ onVirtualCricketClick }) {
       }
     } catch (error) {
       console.error('Balance refresh error:', error);
+    }
+  };
+
+  const handleSearch = async (val) => {
+    setSearchInput(val);
+    if (val.length < 3) {
+      setSearchResults([]);
+      setShowSearchResults(false);
+      return;
+    }
+
+    if (!isLoggedIn || !loginToken) return;
+
+    try {
+      setSearchLoading(true);
+      const res = await marketController.search(loginToken, val);
+      if (Array.isArray(res)) {
+        setSearchResults(res);
+        setShowSearchResults(true);
+      } else {
+        setSearchResults([]);
+      }
+    } catch (err) {
+      console.error('Search failed:', err);
+    } finally {
+      setSearchLoading(false);
     }
   };
 
@@ -108,16 +138,53 @@ function DesktopHeader({ onVirtualCricketClick }) {
                 className="search-input form-control form-control-sm"
                 type="text"
                 placeholder="Search Events"
+                value={searchInput}
+                onChange={(e) => handleSearch(e.target.value)}
+                onFocus={() => searchInput.length >= 3 && setShowSearchResults(true)}
+                onBlur={() => setTimeout(() => setShowSearchResults(false), 200)}
               />
-              <button id="searchClear" className="search-clear" style={{ display: 'none' }}></button>
+              <button 
+                id="searchClear" 
+                className="search-clear" 
+                style={{ display: searchInput ? 'block' : 'none' }}
+                onClick={() => handleSearch('')}
+              ></button>
             </div>
-            <div id="searchResult" className="suggestion-wrap" style={{ display: 'none' }}>
-              <ul id="searchList">
-                <li id="noMatching" style={{ display: 'none' }}>
-                  <p className="no-matching">No events found matching ...</p>
-                </li>
-              </ul>
-            </div>
+            
+            {(showSearchResults || searchLoading) && (
+              <div id="searchResult" className="suggestion-wrap" style={{ display: 'block', maxHeight: '400px', overflowY: 'auto' }}>
+                <ul id="searchList">
+                  {searchLoading && (
+                    <li style={{ padding: '10px', color: '#fff' }}>Searching...</li>
+                  )}
+                  
+                  {!searchLoading && searchResults.length === 0 && searchInput.length >= 3 && (
+                    <li id="noMatching">
+                      <p className="no-matching">No events found matching "{searchInput}"</p>
+                    </li>
+                  )}
+                  
+                  {!searchLoading && searchResults.map((res, index) => (
+                    <li key={res.Gid || index} style={{ borderBottom: '1px solid #333' }}>
+                      <Link 
+                        to={`/sports?type=${res.Type.toLowerCase()}&gid=${res.Gid}`}
+                        style={{ display: 'block', padding: '8px 12px', textDecoration: 'none' }}
+                        onClick={() => {
+                          setSearchInput('');
+                          setSearchResults([]);
+                          setShowSearchResults(false);
+                        }}
+                      >
+                        <p style={{ color: '#ff7a00', fontWeight: 'bold', margin: '0', fontSize: '13px' }}>{res.GameName}</p>
+                        <p style={{ color: '#aaa', margin: '0', fontSize: '11px' }}>
+                          {res.Datetime} | {res.Type}
+                        </p>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
 
           {/* Login or Account Info */}
