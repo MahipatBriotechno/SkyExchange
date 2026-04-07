@@ -1,0 +1,369 @@
+.account-container {
+  display: flex;
+  align-items: flex-start;
+  /* Prevent stretching */
+  max-width: 1350px;
+  margin: 10px auto;
+  gap: 10px;
+  min-height: 80vh;
+}
+
+.account-sidebar {
+  width: 200px;
+  background: #fff;
+  border: 1px solid #ccc;
+  flex-shrink: 0;
+}
+
+.sidebar-header {
+  background: #000;
+  color: #fff;
+  padding: 8px 12px;
+  font-weight: normal;
+  font-size: 13px;
+  text-align: right;
+}
+
+.account-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.account-nav li {
+  border-bottom: 1px solid #eee;
+}
+
+.account-nav a {
+  display: block;
+  padding: 8px 12px;
+  text-decoration: none;
+  color: #333;
+  font-size: 13px;
+}
+
+.account-nav a:hover {
+  background: #f5f5f5;
+}
+
+.account-nav a.active {
+  background: #7c7c7c;
+  color: #fff;
+  font-weight: bold;
+}
+
+.account-main {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.content-header {
+  padding: 0 0 10px 0;
+  font-weight: bold;
+  font-size: 14px;
+  color: #333;
+}
+
+.content-body {
+  padding: 0;
+  flex-grow: 1;
+}
+
+/* Account Details Specific Styles */
+.details-section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.details-box {
+  flex: 1;
+  min-width: 300px;
+  border: 1px solid #7c8e9d;
+  margin-bottom: 20px;
+  background: #fff;
+  /* Ensure white background on individual boxes */
+}
+
+.details-box h3 {
+  background: #3b5160;
+  color: #fff;
+  margin: 0;
+  padding: 6px 10px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.details-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.details-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid #eee;
+  font-size: 12px;
+}
+
+.details-table td:first-child {
+  width: 30%;
+  color: #666;
+  background: #fff;
+}
+
+.edit-link {
+  color: #0077cc;
+  text-decoration: none;
+  font-size: 11px;
+}
+
+/* Balance Overview */
+.balance-summary {
+  background-color: #fff;
+  color: #3b5160;
+  padding: 7px 10px 5px;
+  /* tight padding as requested */
+  border-bottom: 1px solid #7e97a7;
+  margin-bottom: 15px;
+  display: flex;
+}
+
+.balance-item {
+  padding: 10px;
+  /* modified to work with tight wrapper */
+  flex: 0 0 300px;
+  border-right: 1px solid #eee;
+}
+
+.balance-item h4 {
+  margin: 0 0 10px 0;
+  color: #243a48;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.balance-amount {
+  font-size: 32px;
+  font-weight: bold;
+  color: #0077cc;
+}
+
+.balance-amount span {
+  font-size: 14px;
+  color: #999;
+  margin-left: 5px;
+  font-weight: normal;
+}
+
+.welcome-msg {
+  flex: 1;
+  padding-left: 10px;
+  padding-right: 20px;
+}
+
+.welcome-msg h4 {
+  margin: 0 0 10px 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: #333;
+}
+
+.welcome-msg p {
+  margin: 0;
+  font-size: 13px;
+  color: #666;
+  line-height: 1.5;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  background: #fff;
+}
+
+.data-table.balance-table th {
+  background: #e4e4e4;
+  color: #333;
+  padding: 10px;
+  text-align: center;
+  border-top: 1px solid #7e97a7;
+  border-bottom: 1px solid #7e97a7;
+  font-weight: 700;
+}
+
+.data-table.balance-table th:first-child {
+  text-align: left;
+}
+
+.data-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid #eee;
+}
+
+/* My Bets Tabs */
+.tabs-container {
+  display: flex;
+  margin-bottom: 20px;
+  border: 1px solid #7e97a7;
+  border-radius: 4px;
+  width: fit-content;
+  overflow: hidden;
+}
+
+.tab-btn {
+  padding: 8px 30px;
+  border: none;
+  border-right: 1px solid #7e97a7;
+  background: #fff;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 700;
+  color: #3b5160;
+}
+
+.tab-btn:last-child {
+  border-right: none;
+}
+
+.tab-btn.active {
+  background: #3b5160;
+  color: #fff;
+}
+
+.sub-tabs {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 0;
+}
+
+.sub-tab {
+  padding: 6px 15px;
+  border: 1px solid #7e97a7;
+  background: #fff;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 700;
+  color: #3b5160;
+  border-radius: 4px;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+}
+
+.sub-tab.active {
+  background: #3b5160;
+  color: #fff;
+  border-color: #3b5160;
+}
+
+.bets-filter-box {
+  padding: 10px 10px 0;
+  background-color: #e0e6e6;
+  border-top: 4px solid #3b5160;
+  border-bottom: 1px solid #7e97a7;
+  margin-bottom: 10px;
+}
+
+.bets-pnl-wrapper {
+  background: #fff;
+  padding: 7px 10px 5px;
+  border-bottom: 1px solid #7e97a7;
+}
+
+.filter-row {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 7px 10px 5px;
+  background-color: #fff;
+  border-bottom: 1px solid #7e97a7;
+  margin-bottom: 15px;
+  font-size: 13px;
+  color: #3b5160;
+  font-weight: 700;
+}
+
+.text-success {
+  color: #508d0e;
+  font-weight: normal;
+}
+
+/* Pagination */
+.pagination-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  margin-top: 20px;
+  background: #eee;
+  padding: 10px;
+}
+
+.page-btn {
+  padding: 4px 10px;
+  border: 1px solid #ccc;
+  background: #fff;
+  cursor: pointer;
+  font-size: 13px;
+  border-radius: 2px;
+}
+
+.page-btn.active {
+  background: #444;
+  color: #fff;
+  border-color: #444;
+}
+
+.page-btn.disabled {
+  color: #999;
+  cursor: not-allowed;
+  background: #ddd;
+}
+
+.section-title {
+  background: #3b5160;
+  color: #fff;
+  padding: 6px 10px;
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 0;
+}
+
+.btn-submit-bets {
+  background: #222;
+  color: #ff9900;
+  padding: 4px 20px;
+  border: 1px solid #444;
+  border-radius: 4px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn-submit-bets:hover {
+  background: #333;
+}
+
+.date-input {
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  padding: 2px 5px;
+  font-size: 12px;
+}
+
+.disclaimer-text {
+  font-size: 11px;
+  color: #666;
+  line-height: 1.6;
+  margin-top: 15px;
+}
+
+.disclaimer-text p {
+  margin: 2px 0;
+}
+
+.unmatched-section,
+.matched-section {
+  margin-top: 20px;
+  border: 1px solid #7c8e9d;
+}

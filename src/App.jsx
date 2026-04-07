@@ -11,6 +11,11 @@ import ESoccerPage from './pages/ESoccerPage';
 import SportsPage from './pages/SportsPage';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
+import ProfilePage from './pages/Account/ProfilePage';
+import BalanceOverviewPage from './pages/Account/BalanceOverviewPage';
+import BetsHistoryPage from './pages/Account/BetsHistoryPage';
+import AccountStatementPage from './pages/Account/AccountStatementPage';
+import ActivityLogPage from './pages/Account/ActivityLogPage';
 import NotFoundPage from './pages/NotFoundPage';
 
 import './App.css';
@@ -30,6 +35,11 @@ function App() {
         <Route path="/sports" element={<SportsPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/balance-overview" element={<BalanceOverviewPage />} />
+        <Route path="/bets" element={<BetsHistoryPage />} />
+        <Route path="/statement" element={<AccountStatementPage />} />
+        <Route path="/activity-log" element={<ActivityLogPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </Router>
