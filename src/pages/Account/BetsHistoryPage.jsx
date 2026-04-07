@@ -1,9 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import AccountLayout from './AccountLayout';
 
 function BetsHistoryPage() {
   const [activeTab, setActiveTab] = useState('Current Bets');
   const [activeSubTab, setActiveSubTab] = useState('Exchange');
+  const location = useLocation();
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const tabParam = searchParams.get('tab');
+    
+    if (tabParam === 'history') {
+      setActiveTab('Bets History');
+    } else if (tabParam === 'pnl') {
+      setActiveTab('Profit & Loss');
+    } else {
+      setActiveTab('Current Bets');
+    }
+  }, [location.search]);
 
   const renderCurrentBets = () => (
     <>

@@ -276,7 +276,7 @@ function DesktopHeader({ onVirtualCricketClick }) {
                       <span style={{ fontWeight: 'bold', color: '#333' }}>{username}</span><span style={{ fontSize: '11px', color: '#666' }}>GMT+5:30</span>
                     </div>
                     <ul style={{ listStyle: 'none', padding: '0', margin: '0' }}>
-                      {[{ label: 'My Profile', to: '/profile' }, { label: 'Balance Overview', to: '/balance-overview' }, { label: 'Account Statement', to: '/statement' }, { label: 'My Bets', to: '/bets' }, { label: 'Bets History', to: '/bets-history' }, { label: 'Profit & Loss', to: '/profit-loss' }, { label: 'Activity Log', to: '/activity-log' }].map((item) => (
+                      {[{ label: 'My Profile', to: '/profile' }, { label: 'Balance Overview', to: '/balance-overview' }, { label: 'Account Statement', to: '/statement' }, { label: 'My Bets', to: '/bets?tab=current' }, { label: 'Bets History', to: '/bets?tab=history' }, { label: 'Profit & Loss', to: '/bets?tab=pnl' }, { label: 'Activity Log', to: '/activity-log' }].map((item) => (
                         <li key={item.label} style={{ borderBottom: '1px solid #f0f0f0' }}>
                           <Link to={item.to} style={{ display: 'block', padding: '10px 15px', textDecoration: 'none', color: '#333', fontSize: '13px' }} onClick={() => setIsAccountMenuOpen(false)}>{item.label}</Link>
                         </li>
