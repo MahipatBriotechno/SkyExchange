@@ -128,39 +128,37 @@ function DesktopHeader({ onVirtualCricketClick }) {
   return (
     <>
       <div className="top">
-        <div className="header full-wrap">
+        <div className="header full-wrap" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-            <h1 style={{ margin: '0 15px 0 0' }}>
-              <Link to="/">
-                <img src="/images/logo.png" alt="SKYEXCHANGE" style={{ height: '40px' }} />
-              </Link>
+            <h1 style={{ margin: 0, display: 'flex', alignItems: 'center' }}>
+              <Link to="/">SKYEXCHANGE</Link>
             </h1>
-            <div id="searchWrap" className="search-wrap">
-              <input
-                id="searchInput"
-                className="search-input form-control form-control-sm"
-                type="text"
-                placeholder="Search Events"
-                value={searchInput}
-                onChange={(e) => handleSearch(e.target.value)}
-                onFocus={() => searchInput.length >= 3 && setShowSearchResults(true)}
-                onBlur={() => setTimeout(() => setShowSearchResults(false), 200)}
-                style={{ background: '#fff', border: 'none', borderRadius: '4px', height: '24px', fontSize: '12px' }}
-              />
-              <button
-                id="searchClear"
-                className="search-clear"
-                style={{ display: searchInput ? 'block' : 'none' }}
-                onClick={() => handleSearch('')}
-              ></button>
-
+            <div id="searchWrap" className="search-wrap" style={{ display: 'flex', alignItems: 'center', margin: 0, height: '100%', position: 'relative' }}>
+              <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+                <input
+                  id="searchInput"
+                  className="search-input form-control form-control-sm"
+                  type="text"
+                  placeholder="Search Events"
+                  value={searchInput}
+                  onChange={(e) => handleSearch(e.target.value)}
+                  onFocus={() => searchInput.length >= 3 && setShowSearchResults(true)}
+                  onBlur={() => setTimeout(() => setShowSearchResults(false), 200)}
+                />
+                <button
+                  id="searchClear"
+                  className="search-clear"
+                  style={{ display: searchInput ? 'block' : 'none' }}
+                  onClick={() => handleSearch('')}
+                ></button>
+              </div>
               {(showSearchResults || searchLoading) && (
-                <div id="searchResult" className="suggestion-wrap" style={{ position: 'absolute', top: '28px', left: 0, width: '100%', zIndex: 1100, background: '#111', borderRadius: '0 0 4px 4px', boxShadow: '0 4px 10px rgba(0,0,0,0.5)' }}>
+                <div id="searchResult" className="suggestion-wrap" style={{ display: 'block', maxHeight: '400px', overflowY: 'auto', position: 'absolute', top: '100%', left: 0, width: '100%', zIndex: 1100 }}>
                   <ul id="searchList">
-                    {searchLoading && <li style={{ padding: '10px', color: '#fff', fontSize: '12px' }}>Searching...</li>}
+                    {searchLoading && <li style={{ padding: '10px', color: '#fff' }}>Searching...</li>}
                     {!searchLoading && searchResults.length === 0 && searchInput.length >= 3 && (
                       <li id="noMatching">
-                        <p className="no-matching" style={{ padding: '10px', color: '#aaa', margin: 0, fontSize: '12px' }}>No events found matching "{searchInput}"</p>
+                        <p className="no-matching">No events found matching "{searchInput}"</p>
                       </li>
                     )}
                     {!searchLoading && searchResults.map((res, index) => (
@@ -174,7 +172,7 @@ function DesktopHeader({ onVirtualCricketClick }) {
                             setShowSearchResults(false);
                           }}
                         >
-                          <p style={{ color: '#ffbd14', fontWeight: 'bold', margin: '0', fontSize: '13px' }}>{res.GameName}</p>
+                          <p style={{ color: '#ff7a00', fontWeight: 'bold', margin: '0', fontSize: '13px' }}>{res.GameName}</p>
                           <p style={{ color: '#aaa', margin: '0', fontSize: '11px' }}>{res.Datetime} | {res.Type}</p>
                         </Link>
                       </li>
@@ -187,7 +185,7 @@ function DesktopHeader({ onVirtualCricketClick }) {
 
           {!isLoggedIn ? (
             <ul className="login-wrap">
-              <li className="user">
+              <li className="user error">
                 <input type="text" placeholder="Username" value={loginName} onChange={(e) => setLoginName(e.target.value)} />
               </li>
               <li>
@@ -197,18 +195,17 @@ function DesktopHeader({ onVirtualCricketClick }) {
                 <input
                   type="text"
                   placeholder="Validation"
-                  className="validation-input"
                   value={validationInput}
                   onChange={(e) => setValidationInput(e.target.value)}
-                  style={{ width: '100px' }}
+                  style={{ paddingRight: '60px' }}
                 />
-                <span className="validation-code" style={{
+                <span style={{
                   position: 'absolute',
                   color: '#000',
                   fontWeight: 'bold',
                   fontSize: '14px',
                   top: '50%',
-                  right: '5px',
+                  right: '10px',
                   transform: 'translateY(-50%)',
                   pointerEvents: 'none',
                   background: '#eee',
@@ -220,99 +217,81 @@ function DesktopHeader({ onVirtualCricketClick }) {
                 </span>
               </li>
               <li className="li-login">
-                <a className="btn-login" onClick={validateLogin} style={{ cursor: 'pointer' }}>
-                  {loading ? '...' : 'Login'}
-                  <img className="icon-login" src="/images/transparent.gif" alt="" />
-                </a>
+                <a className="btn-login" onClick={validateLogin} style={{ cursor: 'pointer' }}>{loading ? '...' : 'Login'}<img className="icon-login" src="/images/transparent.gif" alt="" /></a>
               </li>
               <li className="li-signup">
                 <Link to="/signup" className="btn-signup">Sign up<img className="icon-login" src="/images/transparent.gif" alt="" /></Link>
               </li>
             </ul>
           ) : (
-            <ul className="account-wrap" style={{ display: 'flex', alignItems: 'center', gap: '5px', padding: 0, margin: 0, listStyle: 'none' }}>
-              <li className="main-wallet" style={{ padding: '0 10px', height: '30px', display: 'flex', alignItems: 'center', cursor: 'pointer', background: 'rgba(255,255,255,0.1)', border: '1px solid #000', borderRadius: '4px', boxShadow: 'inset 0 1px 0 0 rgba(255, 255, 255, 0.5)' }} onClick={() => setIsBalanceModalOpen(!isBalanceModalOpen)}>
-                <span style={{ fontSize: '12px', color: '#ffb600', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  Main Balance <strong style={{ color: '#ffb600' }}>PTH {balanceData.balance}</strong>
-                  Exposure <strong style={{ color: '#ffb600' }}>{balanceData.exposure}</strong>
-                  <span style={{ background: '#ffb600', color: '#000', padding: '0 4px', borderRadius: '2px', fontSize: '10px', fontWeight: 'bold' }}>+3</span>
-                </span>
+            <div className="account-section" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <div className="balance-container" style={{ position: 'relative' }}>
+                <div
+                  className="balance-bar"
+                  style={{ display: 'flex', alignItems: 'center', background: 'linear-gradient(to bottom, #444, #222)', border: '1px solid #555', borderRadius: '4px', padding: '2px', height: '32px', cursor: 'pointer' }}
+                  onClick={() => setIsBalanceModalOpen(!isBalanceModalOpen)}
+                >
+                  <div className="balance-info" style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '0 10px', borderRight: '1px solid #555' }}>
+                    <span style={{ fontSize: '12px', color: '#ffb400' }}>Main Balance <strong style={{ color: '#ffb400' }}>PTH {balanceData.balance}</strong></span>
+                    <span style={{ fontSize: '12px', color: '#ffb400' }}>Exposure <strong style={{ color: '#ffb400' }}>{balanceData.exposure}</strong></span>
+                    <div style={{ border: '1px solid #ffb400', color: '#ffb400', fontSize: '11px', padding: '0 4px', borderRadius: '3px' }}>+3</div>
+                  </div>
+                  <button onClick={(e) => { e.stopPropagation(); refreshBalance(); }} style={{ background: 'none', border: 'none', color: '#ffb400', width: '30px', cursor: 'pointer' }}>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"></path></svg>
+                  </button>
+                </div>
                 {isBalanceModalOpen && (
-                  <div className="balance-modal-content" style={{ position: 'absolute', top: '45px', right: '150px', background: '#e0e6e6', width: '320px', borderRadius: '4px', overflow: 'hidden', boxShadow: '0 4px 15px rgba(0,0,0,0.5)', zIndex: 1001, color: '#333' }} onClick={(e) => e.stopPropagation()}>
+                  <div className="balance-modal-content" style={{ position: 'absolute', top: '36px', right: '0', background: '#ecf0f1', width: '320px', borderRadius: '8px', overflow: 'hidden', boxShadow: '0 10px 25px rgba(0,0,0,0.3)', zIndex: 1001 }} onClick={(e) => e.stopPropagation()}>
                     <div style={{ padding: '15px' }}>
-                      <div style={{ background: '#fff', borderRadius: '4px', padding: '12px', marginBottom: '10px', border: '1px solid #ccc' }}>
-                        <p style={{ margin: '0', fontSize: '12px', color: '#666' }}>Main Balance</p>
-                        <p style={{ margin: '5px 0', fontSize: '18px', fontWeight: 'bold', color: '#3b5160' }}><span style={{ color: '#7f8c8d', fontSize: '13px', marginRight: '5px' }}>PTH</span> {balanceData.balance}</p>
-                        <div style={{ borderTop: '1px solid #eee', marginTop: '10px', paddingTop: '10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                          <span style={{ fontSize: '12px', color: '#666' }}>Exposure</span>
-                          <span style={{ fontSize: '12px', color: '#d0021b', fontWeight: 'bold' }}>{balanceData.exposure}</span>
+                      <div style={{ background: '#fff', borderRadius: '4px', padding: '12px', marginBottom: '10px', border: '1px solid #ddd' }}>
+                        <p style={{ margin: '0', fontSize: '13px', color: '#666' }}>Main Balance</p>
+                        <p style={{ margin: '5px 0', fontSize: '20px', fontWeight: 'bold', color: '#2c3e50' }}><span style={{ color: '#7f8c8d', fontSize: '14px', marginRight: '5px' }}>PTH</span> {balanceData.balance}</p>
+                        <div style={{ borderTop: '1px solid #eee', marginTop: '10px', paddingTop: '10px', display: 'flex', justifyContent: 'space-between' }}>
+                          <span style={{ fontSize: '13px', color: '#666' }}>Exposure</span>
+                          <span style={{ fontSize: '13px', color: '#333' }}>{balanceData.exposure}</span>
                         </div>
                       </div>
-                      {[
-                        { label: 'Royal Gaming Balance', val: '0.00', unit: 'PTH' },
-                        { label: 'Casino Balance', val: '0.00', unit: 'PTH' },
-                        { label: 'BPoker Balance', val: '0.00 Points', unit: '' }
-                      ].map((item) => (
-                        <div key={item.label} style={{ background: '#fff', borderRadius: '4px', padding: '10px', marginBottom: '8px', border: '1px solid #ccc', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                          <div>
-                            <p style={{ margin: '0', fontSize: '11px', color: '#666' }}>{item.label}</p>
-                            <p style={{ margin: '2px 0 0 0', fontSize: '14px', fontWeight: 'bold', color: '#3b5160' }}>
-                              {item.unit && <span style={{ color: '#7f8c8d', fontSize: '11px', marginRight: '3px' }}>{item.unit}</span>}
-                              {item.val}
-                            </p>
-                          </div>
-                          <button style={{ background: '#7c8e9d', border: 'none', padding: '4px 10px', borderRadius: '3px', fontSize: '11px', fontWeight: '600', color: '#fff', cursor: 'pointer' }}>Recall</button>
+                      {[{ label: 'Royal Gaming Balance', val: '0', unit: 'PTH' }, { label: 'Casino Balance', val: '0', unit: 'PTH' }, { label: 'BPoker Balance', val: '0 Points', unit: '' }].map((item) => (
+                        <div key={item.label} style={{ background: '#fff', borderRadius: '4px', padding: '10px', marginBottom: '10px', border: '1px solid #ddd', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <div><p style={{ margin: '0', fontSize: '12px', color: '#666' }}>{item.label}</p><p style={{ margin: '3px 0 0 0', fontSize: '15px', fontWeight: 'bold', color: '#2c3e50' }}>{item.unit && <span style={{ color: '#7f8c8d', fontSize: '12px', marginRight: '3px' }}>{item.unit}</span>}{item.val}</p></div>
+                          <button style={{ background: '#ecf0f1', border: '1px solid #bdc3c7', padding: '5px 12px', borderRadius: '4px', fontSize: '13px', fontWeight: '600', color: '#333', cursor: 'pointer' }}>Recall</button>
                         </div>
                       ))}
-                      <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '5px' }}>
-                        <button style={{ background: '#3b5160', border: 'none', padding: '6px 12px', borderRadius: '3px', fontSize: '12px', fontWeight: 'bold', color: '#fff', cursor: 'pointer' }}>Recall All</button>
+                      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                        <button style={{ background: '#ecf0f1', border: '1px solid #bdc3c7', padding: '8px 15px', borderRadius: '4px', fontSize: '13px', fontWeight: 'bold', cursor: 'pointer' }}>Recall All</button>
                       </div>
                     </div>
-                    <button onClick={() => setIsBalanceModalOpen(false)} style={{ width: '100%', background: '#fff', border: 'none', borderTop: '1px solid #ccc', padding: '10px', fontSize: '14px', fontWeight: 'bold', color: '#333', cursor: 'pointer' }}>Close</button>
+                    <button onClick={() => setIsBalanceModalOpen(false)} style={{ width: '100%', background: '#fff', border: 'none', borderTop: '1px solid #ddd', padding: '12px', fontSize: '15px', fontWeight: 'bold', color: '#333', cursor: 'pointer' }}>Close</button>
                   </div>
                 )}
-              </li>
-              <li className="a-refresh" style={{ width: '30px', height: '30px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', background: 'rgba(255,255,255,0.1)', border: '1px solid #000', borderRadius: '4px', boxShadow: 'inset 0 1px 0 0 rgba(255, 255, 255, 0.5)' }} onClick={refreshBalance}>
-                <img src="/images/transparent.gif" alt="Refresh" style={{ width: '14px', height: '14px' }} />
-              </li>
-              <li className="account" style={{ position: 'relative' }}>
-                <a 
-                  onClick={() => setIsAccountMenuOpen(!isAccountMenuOpen)}
-                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 20px', height: '30px', cursor: 'pointer', background: 'rgba(255,255,255,0.1)', border: '1px solid #000', borderRadius: '4px', color: '#ffb600', fontWeight: 'bold', fontSize: '12px', boxShadow: 'inset 0 1px 0 0 rgba(255, 255, 255, 0.5)' }}
-                >
-                  My Account
-                </a>
+              </div>
+              <div className="account-dropdown-container" style={{ position: 'relative' }}>
+                <button onClick={() => setIsAccountMenuOpen(!isAccountMenuOpen)} onBlur={() => setTimeout(() => setIsAccountMenuOpen(false), 200)} style={{ display: 'flex', alignItems: 'center', gap: '4px', background: 'linear-gradient(to bottom, #444, #222)', border: '1px solid #555', borderRadius: '4px', padding: '0 10px', height: '32px', color: '#ffb400', fontSize: '13px', fontWeight: 'bold', cursor: 'pointer' }}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"></path></svg>
+                  My Account <span style={{ fontSize: '10px' }}>▼</span>
+                </button>
                 {isAccountMenuOpen && (
-                  <div className="account-menu" style={{ position: 'absolute', top: '35px', right: '0', width: '220px', background: '#fff', border: '1px solid #ccc', boxShadow: '0 4px 12px rgba(0,0,0,0.3)', zIndex: 1000, color: '#333' }} onMouseLeave={() => setIsAccountMenuOpen(false)}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', padding: '10px', borderBottom: '1px solid #eee', background: '#f5f5f5', fontSize: '12px' }}>
-                      <span style={{ fontWeight: 'bold' }}>{username}</span>
-                      <span style={{ color: '#666' }}>GMT+5:30</span>
+                  <div className="account-menu" style={{ position: 'absolute', top: '36px', right: '0', width: '240px', background: '#fff', border: '1px solid #ccc', borderRadius: '4px', boxShadow: '0 4px 12px rgba(0,0,0,0.2)', zIndex: 1000, overflow: 'hidden' }} onClick={(e) => e.stopPropagation()}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', padding: '10px', borderBottom: '1px solid #eee', background: '#f9f9f9' }}>
+                      <span style={{ fontWeight: 'bold', color: '#333' }}>{username}</span><span style={{ fontSize: '11px', color: '#666' }}>GMT+5:30</span>
                     </div>
                     <ul style={{ listStyle: 'none', padding: '0', margin: '0' }}>
-                      {[
-                        { label: 'My Profile', to: '/profile' },
-                        { label: 'Balance Overview', to: '/balance-overview' },
-                        { label: 'Account Statement', to: '/statement' },
-                        { label: 'My Bets', to: '/bets' },
-                        { label: 'Bets History', to: '/bets-history' },
-                        { label: 'Profit & Loss', to: '/profit-loss' },
-                        { label: 'Activity Log', to: '/activity-log' }
-                      ].map((item) => (
+                      {[{ label: 'My Profile', to: '/profile' }, { label: 'Balance Overview', to: '/balance-overview' }, { label: 'Account Statement', to: '/statement' }, { label: 'My Bets', to: '/bets' }, { label: 'Bets History', to: '/bets-history' }, { label: 'Profit & Loss', to: '/profit-loss' }, { label: 'Activity Log', to: '/activity-log' }].map((item) => (
                         <li key={item.label} style={{ borderBottom: '1px solid #f0f0f0' }}>
-                          <Link to={item.to} style={{ display: 'block', padding: '8px 15px', textDecoration: 'none', color: '#333', fontSize: '12px' }} onClick={() => setIsAccountMenuOpen(false)}>{item.label}</Link>
+                          <Link to={item.to} style={{ display: 'block', padding: '10px 15px', textDecoration: 'none', color: '#333', fontSize: '13px' }} onClick={() => setIsAccountMenuOpen(false)}>{item.label}</Link>
                         </li>
                       ))}
                     </ul>
                     <div style={{ padding: '10px' }}>
-                      <button onClick={() => logout()} style={{ width: '100%', background: '#7c8e9d', color: '#fff', border: 'none', padding: '8px', borderRadius: '3px', fontWeight: 'bold', fontSize: '12px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '5px' }}>
+                      <button onClick={() => logout()} style={{ width: '100%', background: '#7c8e9d', color: '#fff', border: 'none', padding: '10px', borderRadius: '4px', fontWeight: 'bold', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
                         LOGOUT
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" /></svg>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" /></svg>
                       </button>
                     </div>
                   </div>
                 )}
-              </li>
-            </ul>
+              </div>
+            </div>
           )}
         </div>
 
@@ -339,5 +318,5 @@ function DesktopHeader({ onVirtualCricketClick }) {
   );
 }
 
-export default DesktopHeader;r;
+export default DesktopHeader;
 
