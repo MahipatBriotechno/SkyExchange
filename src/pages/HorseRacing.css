@@ -178,7 +178,7 @@
 /* BANNER */
 .banner1 {
   height: 160px;
-  background: url("../images/KV05.jpg") center/cover no-repeat; /* Simulated path */
+  background: url("/images/KV05.jpg") center/cover no-repeat; /* Simulated path */
   background-color: #243a48;
   border-bottom: 1px solid var(--line);
 }

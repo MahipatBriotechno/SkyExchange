@@ -568,13 +568,4 @@
   .pagination-wrap {
     flex-wrap: wrap;
   }
-}
-
-.filter-actions {
-  flex-direction: column;
-}
-
-.pagination-wrap {
-  flex-wrap: wrap;
-}
-}
+}
