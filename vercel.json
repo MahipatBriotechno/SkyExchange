@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/extsys/:path*",
+      "destination": "https://ambikaexch.in/extsys/:path*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
