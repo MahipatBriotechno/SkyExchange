@@ -654,6 +654,20 @@ body {
   background: #111;
 }
 
+.tag-bm {
+  background: #202b3c !important;
+  color: #fff !important;
+  width: auto !important;
+  padding: 0 4px;
+  min-width: 18px;
+}
+
+.tag-fancy {
+  background: #40316d !important;
+  color: #fff !important;
+  width: 16px;
+}
+
 /* plus btn */
 .plus-btn {
   width: 18px;

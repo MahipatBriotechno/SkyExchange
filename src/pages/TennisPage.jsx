@@ -21,7 +21,6 @@ function TennisPage() {
       kvImage="/images/kv_tennis.jpg"
       competitions={tennisCompetitions}
       countries={tennisCountries}
-      matches={sampleTennisMatches}
     />
   );
 }

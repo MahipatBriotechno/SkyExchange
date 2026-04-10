@@ -20,7 +20,6 @@ function SoccerPage() {
       kvImage="/images/kv_soccer.jpg"
       competitions={soccerCompetitions}
       countries={soccerCountries}
-      matches={sampleSoccerMatches}
     />
   );
 }

@@ -1,36 +1,61 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Layout from './Layout';
 import LeftSidebar from './LeftSidebar';
 import BetSlip from './BetSlip';
 import Footer from './Footer';
+import { marketController } from '../controllers';
 
-// Match row data - sample matches that would come from API in real site
-const sampleCricketMatches = [
-  { id: 1, name: 'Central Stags v Canterbury Kings', status: 'In-Play', matched: 'PTE5.61M', back1: '1000', back2: '', lay2: '', back3: '', lay3: '1.01', hasC: true, hasF: true, hasP: true },
-  { id: 2, name: 'Glenorchy v University of Tasmania', status: 'In-Play', matched: 'PTE0', back1: '', lay1: '', hasC: true, hasF: true, hasP: true },
-  { id: 3, name: 'Khan Research Laboratories v Sahir Associates', status: 'In-Play', matched: 'PTE0', back1: '', lay1: '', hasC: true, hasF: true, hasP: true },
-  { id: 4, name: 'Glenorchy v University of Tasmania', status: 'In-Play', matched: 'PTE0', back1: '', lay1: '', hasC: true, hasF: true, hasP: true },
-  { id: 5, name: 'Australia SRL T20 v West Indies SRL T20', status: '11:30', matched: 'PTE0', back1: '', lay1: '', hasC: true, hasF: true, hasP: true },
-];
+const extractOdd = (runner) => {
+  if (!runner) return { back: '--', lay: '--' };
+  const bp = runner.back || runner.availableToBack || (runner.ex && runner.ex.availableToBack);
+  const lp = runner.lay || runner.availableToLay || (runner.ex && runner.ex.availableToLay);
+  const backPrices = Array.isArray(bp) ? bp : (bp ? Object.values(bp) : []);
+  const layPrices = Array.isArray(lp) ? lp : (lp ? Object.values(lp) : []);
+  const bestBack = backPrices[0];
+  const bestLay = layPrices[0];
+  return {
+    back: bestBack ? (bestBack.price || bestBack.rate || '--') : (runner.lastPriceTraded || '--'),
+    lay: bestLay ? (bestLay.price || bestLay.rate || '--') : '--'
+  };
+};
 
-const sampleSoccerMatches = [
-  { id: 101, name: 'Manchester City v Arsenal', status: 'In-Play', matched: 'PTE12.5M', back1: '1.85', lay1: '1.86', back2: '3.6', lay2: '3.8', back3: '4.2', lay3: '4.5', hasC: true, hasF: false, hasP: true },
-  { id: 102, name: 'Real Madrid v Barcelona', status: '20:30', matched: 'PTE0', back1: '', lay1: '', back2: '', lay2: '', back3: '', lay3: '', hasC: true, hasF: false, hasP: true },
-];
-const sampleTennisMatches = [];
-
-function MatchRow({ match, sport, rowClass = '' }) {
+function MatchRow({ match, odds, sport }) {
   const isLive = match.status === 'In-Play';
-  const gridClass = sport === 'Tennis' ? 'tennis-grid' : '';
+  const matchOdds = odds[match.marketId] || {};
+  const status = (matchOdds.status || matchOdds.Status || '').toUpperCase();
+  const isSuspended = status === 'SUSPENDED' || status === 'CLOSED';
   const navigate = useNavigate();
 
-  return (
-    <div className={`sports-row desktop-grid ${gridClass} ${rowClass} ${rowClass ? 'sports-row-mobile' : ''}`} id={`eventId_${match.id}`}>
-      <div className="col-event">
+  const rawRunners = matchOdds.runner || matchOdds.runners || [];
+  const runnerArr = Array.isArray(rawRunners) ? rawRunners : Object.values(rawRunners);
+  
+  const rowOdds = [null, null, null];
+  if (typeof rawRunners === 'object' && !Array.isArray(rawRunners)) {
+    if (rawRunners["0"]) rowOdds[0] = extractOdd(rawRunners["0"]);
+    if (rawRunners["1"]) rowOdds[1] = extractOdd(rawRunners["1"]);
+    if (rawRunners["2"]) rowOdds[2] = extractOdd(rawRunners["2"]);
+  } else {
+    runnerArr.forEach((r, idx) => { if (idx < 3) rowOdds[idx] = extractOdd(r); });
+  }
+  
+  if (rowOdds[0] && rowOdds[1] && !rowOdds[2]) {
+    rowOdds[2] = rowOdds[1];
+    rowOdds[1] = null;
+  }
+  
+  const prices = rowOdds.map(o => o || { back: '--', lay: '--' });
 
+  return (
+    <div className={`sports-row desktop-grid ${sport === 'Tennis' ? 'tennis-grid' : ''}`} style={{ position: 'relative', opacity: isSuspended ? 0.7 : 1 }}>
+      <div className="col-event">
         <div style={{ display: 'flex', alignItems: 'center', marginBottom: '3px' }}>
           <span className="green-dot" style={{ display: isLive ? 'inline-block' : 'none' }}></span>
+          {match.isWinner && (
+            <div style={{ fontSize: '10px', color: '#666', marginBottom: '-2px', fontWeight: 'bold' }}>
+               {match.startTime}
+            </div>
+          )}
           <a 
             href="#" 
             onClick={(e) => {
@@ -38,7 +63,7 @@ function MatchRow({ match, sport, rowClass = '' }) {
               if (sport === 'Cricket') navigate('/full-market-cricket');
               else if (sport === 'Soccer') navigate('/full-market-soccer');
               else if (sport === 'Tennis') navigate('/full-market-tennis');
-              else if (sport === 'E-Soccer') navigate('/full-market-e-soccer');
+              else navigate('/full-market-cricket');
             }} 
             className="event-link"
           >
@@ -46,48 +71,34 @@ function MatchRow({ match, sport, rowClass = '' }) {
           </a>
         </div>
         <div className="event-sub">
-          <span className={`inplay-text ${isLive ? 'in-play' : ''}`} style={{ color: isLive ? '#008000' : '#333', fontWeight: 'bold' }}>{match.status}</span>
-          {match.hasC && <span className="icon icon-tv" style={{ display: 'inline-block', width: '16px', height: '16px', background: '#0077cc', color: '#fff', borderRadius: '3px', marginLeft: '5px', fontSize: '10px', textAlign: 'center', lineHeight: '16px' }}>C</span>}
-          {match.hasF && <span className="icon icon-fancy" style={{ display: 'inline-block', width: '16px', height: '16px', background: '#ff7b00', color: '#fff', borderRadius: '3px', marginLeft: '5px', fontSize: '10px', textAlign: 'center', lineHeight: '16px' }}>F</span>}
-          {match.hasP && <span className="icon icon-chart" style={{ display: 'inline-block', width: '16px', height: '16px', background: '#333', color: '#fff', borderRadius: '3px', marginLeft: '5px', fontSize: '10px', textAlign: 'center', lineHeight: '16px' }}>P</span>}
-          <a href="#" id={`favoriteBtn_${match.id}`} className="add-pin" title="Add to favorites" style={{ marginLeft: '8px', textDecoration: 'none', color: '#999', fontSize: '16px' }}>☆</a>
+          <span style={{ color: isLive ? '#008000' : '#333', fontWeight: 'bold' }}>{match.status}</span>
+          {match.hasBM && <span className="tag tag-bm" style={{marginLeft: '5px'}}>BM</span>}
+          {match.hasF && <span className="tag tag-fancy" style={{marginLeft: '5px'}}>F</span>}
         </div>
       </div>
 
       <div className="col-matched">
-        <span>{match.matched || 'PTE0'}</span>
+        <span>{match.matched || '0'}</span>
       </div>
 
-      {/* Odds 1 */}
-      <div className="col-odds">
-        <div className="odds-box back">
-          <a href="#" style={{ color: '#000', width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }} onClick={(e) => e.preventDefault()}>{match.back1 || '--'}</a>
-        </div>
-        <div className="odds-box lay">
-          <a href="#" style={{ color: '#000', width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }} onClick={(e) => e.preventDefault()}>{match.lay1 || '--'}</a>
-        </div>
+      <div className="col-odds" style={{ position: 'relative' }}>
+          <div className="odds-box back">{prices[0].back}</div>
+          <div className="odds-box lay">{prices[0].lay}</div>
+          {isSuspended && <div className="suspended-overlay-grid"><span>SUSPENDED</span></div>}
       </div>
 
-      {/* Odds X */}
       {sport !== 'Tennis' && (
-        <div className="col-odds">
-          <div className="odds-box back">
-            <a href="#" style={{ color: '#000', width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }} onClick={(e) => e.preventDefault()}>{match.back2 || '--'}</a>
-          </div>
-          <div className="odds-box lay">
-            <a href="#" style={{ color: '#000', width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }} onClick={(e) => e.preventDefault()}>{match.lay2 || '--'}</a>
-          </div>
+        <div className="col-odds" style={{ position: 'relative' }}>
+          <div className="odds-box back">{prices[1].back}</div>
+          <div className="odds-box lay">{prices[1].lay}</div>
+          {isSuspended && <div className="suspended-overlay-grid"><span>SUSPENDED</span></div>}
         </div>
       )}
 
-      {/* Odds 2 */}
-      <div className="col-odds">
-        <div className="odds-box back">
-          <a href="#" style={{ color: '#000', width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }} onClick={(e) => e.preventDefault()}>{match.back3 || '--'}</a>
-        </div>
-        <div className="odds-box lay">
-          <a href="#" style={{ color: '#000', width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }} onClick={(e) => e.preventDefault()}>{match.lay3 || '--'}</a>
-        </div>
+      <div className="col-odds" style={{ position: 'relative' }}>
+        <div className="odds-box back">{prices[2].back}</div>
+        <div className="odds-box lay">{prices[2].lay}</div>
+        {isSuspended && <div className="suspended-overlay-grid"><span>SUSPENDED</span></div>}
       </div>
 
       <div className="col-expand">
@@ -97,61 +108,176 @@ function MatchRow({ match, sport, rowClass = '' }) {
   );
 }
 
-
 function SportPageWithLayout({
   sport,
   kvImage,
-  competitions = [],
   countries = [],
-  matches = [],
-  viewByOptions = ['Time', 'Competition'],
 }) {
-  const [viewBy, setViewBy] = React.useState('Time');
+  const [viewBy, setViewBy] = useState('Time');
+  const [matches, setMatches] = useState([]);
+  const [competitions, setCompetitions] = useState([]);
+  const [odds, setOdds] = useState({});
+  const [loading, setLoading] = useState(false);
+  const pollingRef = useRef(null);
+
+  const parseDate = (str) => {
+    if (!str) return null;
+    const dateVal = str.includes('T') ? str : str.replace(' ', 'T');
+    let d = new Date(dateVal);
+    if (isNaN(d.getTime())) {
+      const parts = str.split(/[-/ :]/);
+      if (parts.length >= 3) {
+        const day = parseInt(parts[0], 10);
+        const month = parseInt(parts[1], 10) - 1;
+        const year = parseInt(parts[2], 10);
+        if (day <= 31 && month <= 11) {
+          const hour = parseInt(parts[3] || '0', 10);
+          const minute = parseInt(parts[4] || '0', 10);
+          const second = parseInt(parts[5] || '0', 10);
+          d = new Date(year, month, day, hour, minute, second);
+        }
+      }
+    }
+    return d && !isNaN(d.getTime()) ? d : null;
+  };
+
+  useEffect(() => {
+    const fetchMatches = async () => {
+      try {
+        setLoading(true);
+        const res = await marketController.getGameList(sport);
+        let matchData = [];
+        if (res && res.matches) {
+            matchData = res.matches;
+        } else if (res && typeof res === 'object') {
+          matchData = Object.values(res).filter(v => typeof v === 'object' && v !== null && (v.MarketId || v.marketid));
+        }
+        
+        const now = new Date();
+        const processed = matchData.map(m => {
+            const startTimeStr = m.DateTime || m.dateTime || m.Datetime || m.staredtime || m.StartTime || '';
+            const startTime = parseDate(startTimeStr);
+            const isWinnerMarket = (m.Game_Type || m.GameType || '').toLowerCase() === 'winner' || (m.Team2 || '').includes('TOURNAMENT_WINNER');
+            const team1 = m.Team1 || m.team1;
+            const team2 = m.Team2 || m.team2;
+            const gName = m.Game_name || m.GameName || m.ename || m.name || m.Competition;
+            let name = 'Match';
+            if (team1 && team2) name = team2 === 'TOURNAMENT_WINNER' ? team1 : `${team1} vs ${team2}`;
+            else if (gName) name = gName;
+
+            return {
+                id: m.gid || m.Gid || m.Event_Id || m.eid || m.MarketId || Math.random(),
+                marketId: m.MarketId || m.marketid,
+                name,
+                status: (startTime && startTime <= now) || isWinnerMarket ? 'In-Play' : (startTimeStr.split(' ')[1] || startTimeStr),
+                matched: m.Matched || m.matched || '0',
+                startTime: startTimeStr,
+                isWinner: isWinnerMarket,
+                hasBM: !!(m.bm || m.bookmaker),
+                hasF: !!(m.f || m.fancy)
+            };
+        });
+        setMatches(processed);
+      } catch (err) {
+        console.error('Failed to fetch matches:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    const fetchCompetitions = async () => {
+        try {
+            const res = await marketController.getCompetitionList(sport);
+            if (Array.isArray(res)) setCompetitions(res);
+            else if (res && typeof res === 'object') {
+                const list = Object.values(res).filter(v => typeof v === 'object' && v !== null && (v.Competition_Name || v.name));
+                setCompetitions(list);
+            }
+        } catch (err) { }
+    };
+
+    fetchMatches();
+    fetchCompetitions();
+  }, [sport]);
+
+  useEffect(() => {
+    if (matches.length === 0) return;
+    const marketIds = matches.map(m => m.marketId).filter(id => !!id).join(',');
+    if (!marketIds) return;
+
+    const fetchRates = async () => {
+      try {
+        const res = await marketController.getLiveRates(marketIds);
+        if (res && typeof res === 'object' && !res.error) {
+           setOdds(prev => ({ ...prev, ...res }));
+        }
+      } catch (err) { }
+    };
+
+    let isMounted = true;
+    const poll = async () => {
+      if (!isMounted) return;
+      await fetchRates();
+      pollingRef.current = setTimeout(poll, 1500);
+    };
+    poll();
+    return () => {
+      isMounted = false;
+      if (pollingRef.current) clearTimeout(pollingRef.current);
+    };
+  }, [matches]);
+
   return (
     <Layout>
-      {/* Main 3-column grid layout matching HTML */}
+      <style>{`
+        .suspended-overlay-grid {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(255, 255, 255, 0.85);
+            z-index: 5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+            border: 1px solid #ddd;
+        }
+        .suspended-overlay-grid span {
+            color: #d00;
+            font-weight: 900;
+            font-size: 10px;
+            background: #fff;
+            padding: 1px 4px;
+            border: 1px solid #d00;
+            border-radius: 2px;
+        }
+      `}</style>
       <main className="main">
-        {/* Left sidebar */}
         <LeftSidebar sport={sport} competitions={competitions} countries={countries} />
-
-        {/* Center column */}
         <div id="centerColumn" className="center">
-          {/* News Marquee */}
           <div id="marqueeWrap" className="marquee-box1">
             <h4>News</h4>
             <div className="marquee">
-              <p id="marqueeContent">Horse Racing Updates ● Bets Voided ● Market Update ● Horse Racing Updates ● Bets Voided ● Market Update</p>
+              <p id="marqueeContent">Sports Update ● New Markets Available ● Place your bets now!</p>
             </div>
           </div>
 
-          <div id="overWrap" className="over-wrap" style={{ height: 'calc(100% - 0px)' }}>
-            {/* KV Banner */}
-            {kvImage && (
-              <div className="banner1" style={{ backgroundImage: `url(${kvImage})` }}></div>
-            )}
+          <div id="overWrap" className="over-wrap">
+            {kvImage && <div className="banner1" style={{ backgroundImage: `url(${kvImage})` }}></div>}
 
-            {/* Event table */}
             <div id="sportEvent" className="sports-highlights">
-              {/* Sports header bar */}
               <div className="sports-header">
-                <span className="sports-title">Sports Highlights</span>
+                <span className="sports-title">{sport} Highlights</span>
                 <div className="viewby-box">
                   <span className="viewby-text">View by</span>
-                  <select
-                    value={viewBy}
-                    onChange={(e) => setViewBy(e.target.value)}
-                    className="viewby-select"
-                  >
-                    {viewByOptions.map((opt) => (
-                      <option key={opt} value={opt}>{opt}</option>
-                    ))}
+                  <select value={viewBy} onChange={(e) => setViewBy(e.target.value)} className="viewby-select">
+                    <option value="Time">Time</option>
+                    <option value="Competition">Competition</option>
                   </select>
                 </div>
               </div>
 
-              {/* Table header */}
               <div className={`sports-table-head desktop-grid ${sport === 'Tennis' ? 'tennis-grid' : ''}`}>
-                <div className="col-event"></div>
+                <div className="col-event">Event</div>
                 <div className="col-matched" style={{ paddingLeft: '10px' }}>Matched</div>
                 <div className="col-odds-1" style={{ justifyContent: 'center', fontWeight: 'bold' }}>1</div>
                 {sport !== 'Tennis' && <div className="col-odds-1" style={{ justifyContent: 'center', fontWeight: 'bold' }}>X</div>}
@@ -159,71 +285,27 @@ function SportPageWithLayout({
                 <div className="col-expand"></div>
               </div>
 
-              {(sport === 'Soccer' || sport === 'Cricket' || sport === 'Tennis' || sport === 'E-Soccer' || sport === 'Multi Markets') && (
-                <>
-                  <h3 className="mobile-h3">Highlights</h3>
-                  <div className="sorting-wrap">
-                    <ul id="viewType">
-                      <li className="select">by Time</li>
-                      <li>by Competition</li>
-                    </ul>
-                  </div>
-                </>
-              )}
-
               <div id="eventlistData">
                 {matches.length > 0 ? (
                   matches.map((m) => (
-                    <MatchRow 
-                      key={m.id} 
-                      match={m} 
-                      sport={sport} 
-                      rowClass={(sport === 'Soccer' || sport === 'Cricket' || sport === 'Tennis' || sport === 'E-Soccer' || sport === 'Multi Markets') ? 'mobile-grid' : ''} 
-                    />
+                    <MatchRow key={m.id} match={m} odds={odds} sport={sport} />
                   ))
                 ) : (
-                  <div className="no-item" style={{ textAlign: 'center', padding: '20px' }}>
-                    <div className="loading-wrap" style={{ display: 'flex', justifyContent: 'center' }}>
-                      <ul className="loading" style={{ listStyle: 'none', padding: 0 }}>
-                        <li><img src="/images/loading40.gif" alt="" /></li>
-                        <li>Loading...</li>
-                      </ul>
-                    </div>
+                  <div className="no-item" style={{ textAlign: 'center', padding: '40px' }}>
+                    {loading ? 'Loading matches...' : `No matches found for ${sport}`}
                   </div>
                 )}
               </div>
             </div>
-
-
-            {/* Footer */}
             <Footer />
           </div>
         </div>
-
-        {/* Right Bet Slip */}
         <div className="betslip">
           <BetSlip />
         </div>
       </main>
-
-      {/* Announcement overlay */}
-      <div id="siteAnnouncement" className="overlay" style={{ display: 'none' }}>
-        <div className="announce-wrap">
-          <div className="announce-header"><h1>Notice</h1></div>
-          <div className="tc-content"><p>TEXT</p></div>
-          <ul className="announce-footer">
-            <li>
-              <a href="#" className="btn-send" onClick={(e) => {
-                e.preventDefault();
-                document.getElementById('siteAnnouncement').style.display = 'none';
-              }}>OK</a>
-            </li>
-          </ul>
-        </div>
-      </div>
     </Layout>
   );
 }
 
-export { sampleCricketMatches, sampleSoccerMatches, sampleTennisMatches };
 export default SportPageWithLayout;

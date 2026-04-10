@@ -1,5 +1,5 @@
 import React from 'react';
-import SportPageWithLayout, { sampleCricketMatches } from '../components/SportPage';
+import SportPageWithLayout from '../components/SportPage';
 
 const cricketCompetitions = [
   'Australia NCL Women', 'Bangladesh Premier League', 'BBL', 'CWI T20 Blaze',
@@ -17,7 +17,6 @@ function CricketPage() {
       kvImage="/images/kv_cricket.jpg"
       competitions={cricketCompetitions}
       countries={cricketCountries}
-      matches={sampleCricketMatches}
     />
   );
 }
