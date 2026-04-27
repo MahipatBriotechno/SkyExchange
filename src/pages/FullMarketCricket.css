@@ -160,33 +160,52 @@
   color: #000;
 }
 
-/* Center Control Bar */
+/* Center Control Bar - Aligned Right as per UI */
 .market-control-bar {
   display: flex;
-  justify-content: center;
-  padding: 5px 0;
-  background-color: #f5f5f5;
-  border-bottom: 2px solid #243a48;
+  justify-content: flex-end;
+  background-color: transparent;
+  padding: 0;
+  margin-bottom: -1px;
+  z-index: 10;
+  position: relative;
 }
 
 .control-bar-inner {
   display: flex;
-  align-items: center;
-  background: #243a48;
-  color: white;
-  padding: 4px 20px;
-  border-radius: 20px 20px 0 0;
-  gap: 25px;
-  font-size: 16px;
+  background-color: #3e5361;
+  height: 32px;
+  border-radius: 0 0 12px 12px;
+  margin-right: 30px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
-.control-bar-inner i {
-  display: inline-block;
+.icon-btn {
+  width: 50px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-right: 1px solid rgba(255,255,255,0.15);
+  transition: background 0.2s;
+}
+
+.icon-btn:hover {
+  background-color: #4a6273;
+}
+
+.icon-btn:last-child {
+  border-right: none;
+}
+
+.icon-pin, .icon-refresh {
   width: 16px;
   height: 16px;
   background-repeat: no-repeat;
   background-position: center;
-  cursor: pointer;
+  background-size: contain;
 }
 
 .icon-pin {

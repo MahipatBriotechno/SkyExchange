@@ -22,6 +22,7 @@ import FullMarketCricketPage from './pages/FullMarketCricketPage';
 import FullMarketSoccerPage from './pages/FullMarketSoccerPage';
 import FullMarketTennisPage from './pages/FullMarketTennisPage';
 import FullMarketESoccerPage from './pages/FullMarketESoccerPage';
+import EventDetailedPage from './pages/EventDetailedPage';
 import NotFoundPage from './pages/NotFoundPage';
 
 import './App.css';
@@ -44,6 +45,8 @@ function App() {
         <Route path="/full-market-soccer" element={<FullMarketSoccerPage />} />
         <Route path="/full-market-tennis" element={<FullMarketTennisPage />} />
         <Route path="/full-market-e-soccer" element={<FullMarketESoccerPage />} />
+        <Route path="/event-detail/:matchId" element={<EventDetailedPage />} />
+        <Route path="/:sport/:matchId" element={<EventDetailedPage />} />
         <Route path="/sports" element={<SportsPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />

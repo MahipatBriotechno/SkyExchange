@@ -60,10 +60,7 @@ function MatchRow({ match, odds, sport }) {
             href="#" 
             onClick={(e) => {
               e.preventDefault();
-              if (sport === 'Cricket') navigate('/full-market-cricket');
-              else if (sport === 'Soccer') navigate('/full-market-soccer');
-              else if (sport === 'Tennis') navigate('/full-market-tennis');
-              else navigate('/full-market-cricket');
+              navigate(`/${sport.toLowerCase()}/${match.id || match.marketId}`);
             }} 
             className="event-link"
           >

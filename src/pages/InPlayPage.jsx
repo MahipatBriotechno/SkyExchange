@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Layout from '../components/Layout';
 import { marketController } from '../controllers';
 
@@ -16,7 +17,8 @@ const extractOdd = (runner) => {
   };
 };
 
-function EventRow({ evt, odds }) {
+function EventRow({ evt, odds, sportName }) {
+  const navigate = useNavigate();
   const isLive = evt.status === 'In-Play';
   const matchOdds = odds[evt.marketId] || {};
   const status = (matchOdds.status || matchOdds.Status || '').toUpperCase();
@@ -50,7 +52,17 @@ function EventRow({ evt, odds }) {
             {evt.startTime}
           </div>
         )}
-        <a className="event-name" href="#">{evt.name}</a>
+        <a 
+          className="event-name" 
+          href="#"
+          onClick={(e) => {
+            e.preventDefault();
+            const s = (sportName || evt.sport || 'cricket').toLowerCase();
+            navigate(`/${s}/${evt.id || evt.marketId}`);
+          }}
+        >
+          {evt.name}
+        </a>
         <div className="event-meta">
           <span style={{color: isLive ? '#2a9c39' : '#333', fontWeight: 'bold'}}>{evt.status}</span>
           {evt.hasE && <span className="tag tag-gray">E</span>}
@@ -278,7 +290,7 @@ function InPlayPage() {
           </thead>
           <tbody>
             {groupMap[sport].map((evt) => (
-              <EventRow key={evt.id} evt={evt} odds={odds} />
+              <EventRow key={evt.id} evt={evt} odds={odds} sportName={sport} />
             ))}
           </tbody>
         </table>
