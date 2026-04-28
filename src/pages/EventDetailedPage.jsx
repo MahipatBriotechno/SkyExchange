@@ -202,7 +202,7 @@ const EventDetailedPage = () => {
             onPin={handleToggleFavourite}
             onRefresh={fetchGameData}
           />
-          <ul className="match-btn flex justify-end">
+          <ul className="match-btn flex justify-center">
             <li>
               <a id="liveMultiMarketPin" class="btn-pin"
                 title="Add to Multi Markets" onClick={(e) => {
@@ -226,7 +226,28 @@ const EventDetailedPage = () => {
               onBetClick={(runner, type, price) => handleBetClick(runner, type, price, 'Match Odds')}
             />
 
+            {/* Bookmaker Table */}
+            <BookmakerTable
+              onBetClick={(runner, type, price) => handleBetClick(runner, type, price, 'Bookmaker')}
+            />
 
+            <OddsTable
+              marketName="Win The Toss"
+              marketData={{}}
+              onBetClick={(runner, type, price) => handleBetClick(runner, type, price, 'Win The Toss')}
+            />
+
+            <OddsTable
+              marketName="Line Market"
+              marketData={{}}
+              onBetClick={(runner, type, price) => handleBetClick(runner, type, price, 'Line Market')}
+            />
+            <OddsTable
+              marketName="Tied Match"
+              marketData={{}}
+              onBetClick={(runner, type, price) => handleBetClick(runner, type, price, 'Line Market')}
+            />
+            <FancyTable />
           </div>
         </div>
       </EventLayout>

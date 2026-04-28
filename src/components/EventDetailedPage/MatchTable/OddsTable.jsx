@@ -1,6 +1,6 @@
 import React from 'react';
 
-const OddsTable = ({ marketData, onBetClick }) => {
+const OddsTable = ({ marketData, onBetClick, marketName = 'Match Odds' }) => {
   const oddsWidth = '114.688px';
   const uniformHeight = '35px';
 
@@ -47,86 +47,97 @@ const OddsTable = ({ marketData, onBetClick }) => {
   return (
     <div style={{ width: '100%', marginBottom: '16px' }}>
 
-      {/* MATCH ODDS HEADER */}
-      <div style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        background: '#fff',
-        border: '1px solid #d9d9d9',
-        borderBottom: 'none',
-        height: '42px',
-        position: 'relative', // Added for potential absolute centering if needed
-        ...baseFont
-      }}>
-        {/* Left Section */}
-        <div style={{ display: 'flex', alignItems: 'center', height: '100%' }}>
-          <div style={{
-            background: '#cfd8dc',
-            height: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            padding: '0 12px',
-            fontWeight: '700',
-            color: '#2b3a47'
-          }}>
-            Match Odds
-          </div>
-
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '5px',
-            color: '#2aa84a',
-            fontWeight: '600',
-            marginLeft: '15px'
-          }}>
-            <span style={{ width: '12px', height: '12px' }}>
-              <img src="/icons/in-play.svg" alt="" style={{ width: '100%' }} />
-            </span>
-            In-Play
-          </div>
-        </div>
-
-        {/* Center Section (Max 8000) */}
+      {/* HEADER SECTION */}
+      {marketName === 'Match Odds' ? (
         <div style={{
-          position: 'absolute',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          background: '#cfd8dc',
-          padding: '2px 10px',
-          borderRadius: '4px',
-          fontFamily: 'Tahoma, Helvetica, sans-serif',
-          fontSize: '12px',
-          lineHeight: '16px',
-          fontWeight: '400',
-          letterSpacing: 'normal',
-          color: '#1E1E1E'
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          background: '#fff',
+          border: '1px solid #d9d9d9',
+          borderBottom: 'none',
+          height: '42px',
+          position: 'relative',
+          ...baseFont
         }}>
-          Max 8000
-        </div>
+          {/* Left Section */}
+          <div style={{ display: 'flex', alignItems: 'center', height: '100%' }}>
+            <div style={{
+              background: '#cfd8dc',
+              height: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              padding: '0 12px',
+              fontWeight: '700',
+              color: '#2b3a47'
+            }}>
+              Match Odds
+            </div>
 
-        {/* Right Section */}
-        <div style={{ display: 'flex', gap: '15px', alignItems: 'center', paddingRight: '10px' }}>
-          <div style={{ color: '#2b3a47', fontWeight: '400' }}>
-            Matched <span style={{ fontWeight: '700' }}>PTH 676,521,907</span>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '5px',
+              color: '#2aa84a',
+              fontWeight: '600',
+              marginLeft: '15px'
+            }}>
+              <span style={{ width: '12px', height: '12px' }}>
+                <img src="/icons/in-play.svg" alt="" style={{ width: '100%' }} />
+              </span>
+              In-Play
+            </div>
           </div>
 
+          {/* Center Section (Max 8000) */}
           <div style={{
-            background: '#1f6f8b',
-            color: '#fff',
-            padding: '2px 8px',
-            borderRadius: '3px',
-            fontWeight: '700',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '5px'
+            position: 'absolute',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            background: '#cfd8dc',
+            padding: '2px 10px',
+            borderRadius: '4px',
+            fontFamily: 'Tahoma, Helvetica, sans-serif',
+            fontSize: '12px',
+            lineHeight: '16px',
+            fontWeight: '400',
+            letterSpacing: 'normal',
+            color: '#1E1E1E'
           }}>
-            <span style={{ fontSize: '14px' }}>📺</span>
-            Live
+            Max 8000
+          </div>
+
+          {/* Right Section */}
+          <div style={{ display: 'flex', gap: '15px', alignItems: 'center', paddingRight: '10px' }}>
+            <div style={{ color: '#2b3a47', fontWeight: '400' }}>
+              Matched <span style={{ fontWeight: '700' }}>PTH 676,521,907</span>
+            </div>
+
+            <div style={{
+              background: '#1f6f8b',
+              color: '#fff',
+              padding: '2px 8px',
+              borderRadius: '3px',
+              fontWeight: '700',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '5px'
+            }}>
+              <span style={{ fontSize: '14px' }}>📺</span>
+              Live
+            </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <div className="bg-[#1f2933] text-white flex items-center px-3 py-2">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2 text-gray-300" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z" />
+          </svg>
+          <span className="font-bold text-sm">{marketName}</span>
+          <span className="mx-2 text-gray-400">|</span>
+          <span className="text-sm text-gray-300">Zero Commission</span>
+        </div>
+      )}
 
       {/* TABLE */}
       <table style={{
