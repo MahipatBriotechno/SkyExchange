@@ -123,23 +123,9 @@ const OddsTable = ({ marketData, onBetClick, marketName, liveRates = {} }) => {
 
           {/* Right Section */}
           <div style={{ display: 'flex', gap: '15px', alignItems: 'center', paddingRight: '10px' }}>
-            <div style={{ color: '#2b3a47', fontWeight: '400' }}>
-              Matched <span style={{ fontWeight: '700' }}>PTH 676,521,907</span>
-            </div>
 
-            <div style={{
-              background: '#1f6f8b',
-              color: '#fff',
-              padding: '2px 8px',
-              borderRadius: '3px',
-              fontWeight: '700',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '5px'
-            }}>
-              <span style={{ fontSize: '14px' }}>📺</span>
-              Live
-            </div>
+
+
           </div>
         </div>
       ) : (

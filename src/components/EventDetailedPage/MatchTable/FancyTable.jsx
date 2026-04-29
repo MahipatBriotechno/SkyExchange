@@ -211,10 +211,10 @@ const FancyTable = ({ fancyData, onBetClick, liveRates = {} }) => {
       }}>
         <div style={{ flex: 1, borderRight: '1px solid #e0e0e0' }} />
         <div style={{ width: '229.376px' }} />
-        <div style={{ width: '114.688px', textAlign: 'center', fontWeight: 'bold', fontSize: '12px', color: '#333', padding: '4px 0' }}>
+        <div style={{ width: '114.688px', textAlign: 'center', textTransform: "uppercase", fontWeight: 'bold', fontSize: '12px', color: '#333', padding: '4px 0' }}>
           no
         </div>
-        <div style={{ width: '114.688px', textAlign: 'center', fontWeight: 'bold', fontSize: '12px', color: '#333', padding: '4px 0' }}>
+        <div style={{ width: '114.688px', textAlign: 'center', textTransform: "uppercase", fontWeight: 'bold', fontSize: '12px', color: '#333', padding: '4px 0' }}>
           yes
         </div>
         <div style={{ width: '229.376px' }} />
