@@ -1,7 +1,8 @@
 import React from 'react';
 import { getRunnerRates, getMarketStatus } from '../../../utils/rateRefiner';
 
-const OddsTable = ({ marketData, onBetClick, marketName = 'Match Odds', liveRates = {} }) => {
+const OddsTable = ({ marketData, onBetClick, marketName, liveRates = {} }) => {
+  const displayName = marketData?.name || marketName || 'Match Odds';
   const oddsWidth = '114.688px';
   const uniformHeight = '35px';
 
@@ -79,7 +80,7 @@ const OddsTable = ({ marketData, onBetClick, marketName = 'Match Odds', liveRate
     <div style={{ width: '100%', marginBottom: '16px' }}>
 
       {/* HEADER SECTION */}
-      {marketName === 'Match Odds' ? (
+      {marketData?.Type === 'ODDS' ? (
         <div style={{
           display: 'flex',
           justifyContent: 'space-between',
@@ -102,7 +103,7 @@ const OddsTable = ({ marketData, onBetClick, marketName = 'Match Odds', liveRate
               fontWeight: '700',
               color: '#2b3a47'
             }}>
-              Match Odds
+              {displayName}
             </div>
 
             <div style={{
@@ -147,7 +148,7 @@ const OddsTable = ({ marketData, onBetClick, marketName = 'Match Odds', liveRate
             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2 text-gray-300" viewBox="0 0 20 20" fill="currentColor">
               <path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z" />
             </svg>
-            <span className="font-bold text-sm">{marketName}</span>
+            <span className="font-bold text-sm">{displayName}</span>
             <span className="mx-2 text-gray-400">|</span>
             <span className="text-sm text-gray-300">Zero Commission</span>
           </div>
