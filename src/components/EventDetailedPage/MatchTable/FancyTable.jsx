@@ -7,22 +7,51 @@ import React, { useState } from 'react';
  * - Teal header bar with "Fancy Bet" title and info icon
  * - Filter tabs: All | Fancy | Ball by Ball | Khadda | Lottery | Odd/Even
  * - Dark pinned sub-header "Fancy Bet"
- * - Column labels: Nos (pink/lay) | Yess (blue/back)
- * - Each row: market name | Nos cell (pink) | Yess cell (blue) | Min/Max info
+ * - Column labels: no (pink/lay) | yes (blue/back)
+ * - Each row: market name | no cell (pink) | yes cell (blue) | Min/Max info
  */
 
 const FILTER_TABS = ['All', 'Fancy', 'Ball by Ball', 'Khadda', 'Lottery', 'Odd/Even'];
 
 const DEMO_MARKETS = [
-  { id: 1, name: '20 Over UAE', nos: 137, nosRate: 100, yess: 139, yessRate: 100, min: '1.00', max: '781.00' },
-  { id: 2, name: '18 Over NEP', nos: 102, nosRate: 100, yess: 103, yessRate: 100, min: '1.00', max: '500.00' },
-  { id: 3, name: '6 Over Run UAE', nos: 42, nosRate: 100, yess: 44, yessRate: 100, min: '1.00', max: '300.00' },
+  { id: 1, name: '20 Over UAE', no: 137, noRate: 100, yes: 139, yesRate: 100, min: '1.00', max: '781.00' },
+  { id: 2, name: '18 Over NEP', no: 102, noRate: 100, yes: 103, yesRate: 100, min: '1.00', max: '500.00' },
+  { id: 3, name: '6 Over Run UAE', no: 42, noRate: 100, yes: 44, yesRate: 100, min: '1.00', max: '300.00' },
 ];
 
 const FancyTable = ({ fancyData, onBetClick }) => {
   const [activeTab, setActiveTab] = useState('All');
 
-  const markets = fancyData && fancyData.length > 0 ? fancyData : DEMO_MARKETS;
+  const allMarkets = fancyData && fancyData.length > 0 
+    ? fancyData.map(m => ({
+        id: m.eid,
+        name: m.name,
+        no: '-',
+        noRate: '-',
+        yes: '-',
+        yesRate: '-',
+        min: m.min,
+        max: m.max,
+        subType: m.SubType,
+      }))
+    : DEMO_MARKETS;
+
+  const markets = allMarkets.filter(m => {
+    if (activeTab === 'All') return true;
+    if (activeTab === 'Ball by Ball') return m.subType === 'SINGLE_OVER';
+    if (activeTab === 'Odd/Even') return m.name?.toLowerCase().includes('odd run bhav');
+    if (activeTab === 'Fancy') {
+      // Fancy usually includes OVERS, BATSMAN and general ones, but excludes Ball by Ball and Odd/Even
+      const isBallByBall = m.subType === 'SINGLE_OVER';
+      const isOddEven = m.name?.toLowerCase().includes('odd run bhav');
+      return !isBallByBall && !isOddEven;
+    }
+    // Khadda and Lottery might be specific naming patterns if they exist in the data
+    if (activeTab === 'Khadda') return m.name?.toLowerCase().includes('khadda');
+    if (activeTab === 'Lottery') return m.name?.toLowerCase().includes('lottery');
+    
+    return false;
+  });
 
   return (
     <div style={{ fontFamily: 'Tahoma, Arial, sans-serif', fontSize: '13px', marginBottom: '8px' }}>
@@ -156,31 +185,33 @@ const FancyTable = ({ fancyData, onBetClick }) => {
         borderBottom: '1px solid #e0e0e0',
       }}>
         {/* Left spacer (market name column) */}
-        <div style={{ flex: 1 }} />
-        {/* Nos header */}
+        <div style={{ flex: 1, borderRight: '1px solid #e0e0e0' }} />
+        {/* Spacer to align with 3rd odd column */}
+        <div style={{ width: '229.376px' }} />
+        {/* yes header */}
         <div style={{
-          width: '72px',
+          width: '114.688px',
           textAlign: 'center',
           fontWeight: 'bold',
           fontSize: '12px',
           color: '#333',
           padding: '4px 0',
         }}>
-          Nos
+          yes
         </div>
-        {/* Yess header */}
+        {/* no header */}
         <div style={{
-          width: '72px',
+          width: '114.688px',
           textAlign: 'center',
           fontWeight: 'bold',
           fontSize: '12px',
           color: '#333',
           padding: '4px 0',
         }}>
-          Yess
+          no
         </div>
         {/* Min/Max spacer */}
-        <div style={{ width: '80px' }} />
+        <div style={{ width: '229.376px' }} />
       </div>
 
       {/* ── Market rows ── */}
@@ -200,44 +231,23 @@ const FancyTable = ({ fancyData, onBetClick }) => {
               flex: 1,
               display: 'flex',
               alignItems: 'center',
-              padding: '4px 8px',
+              padding: '4px 16px',
               fontSize: '13px',
               fontWeight: '600',
               color: '#222',
+              borderRight: '1px solid #e8e8e8',
             }}>
               {market.name}
             </div>
 
-            {/* Nos (Lay / pink) cell */}
-            <div
-              onClick={() => onBetClick && onBetClick({ ...market, side: 'nos' })}
-              style={{
-                width: '72px',
-                background: '#faa9ba',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer',
-                borderLeft: '1px solid #fff',
-                transition: 'opacity 0.15s',
-              }}
-              onMouseEnter={e => e.currentTarget.style.opacity = '0.82'}
-              onMouseLeave={e => e.currentTarget.style.opacity = '1'}
-            >
-              <span style={{ fontWeight: 'bold', fontSize: '14px', lineHeight: 1.1, color: '#000' }}>
-                {market.nos}
-              </span>
-              <span style={{ fontSize: '11px', color: '#444', lineHeight: 1.1 }}>
-                {market.nosRate}
-              </span>
-            </div>
+            {/* Left spacer for alignment */}
+            <div style={{ width: '229.376px' }} />
 
-            {/* Yess (Back / blue) cell */}
+            {/* yes (Back / blue) cell */}
             <div
-              onClick={() => onBetClick && onBetClick({ ...market, side: 'yess' })}
+              onClick={() => onBetClick && onBetClick({ ...market, side: 'yes' })}
               style={{
-                width: '72px',
+                width: '114.688px',
                 background: '#72bbef',
                 display: 'flex',
                 flexDirection: 'column',
@@ -251,17 +261,43 @@ const FancyTable = ({ fancyData, onBetClick }) => {
               onMouseLeave={e => e.currentTarget.style.opacity = '1'}
             >
               <span style={{ fontWeight: 'bold', fontSize: '14px', lineHeight: 1.1, color: '#000' }}>
-                {market.yess}
+                {market.yes}
               </span>
               <span style={{ fontSize: '11px', color: '#444', lineHeight: 1.1 }}>
-                {market.yessRate}
+                {market.yesRate}
+              </span>
+            </div>
+
+            {/* no (Lay / pink) cell */}
+            <div
+              onClick={() => onBetClick && onBetClick({ ...market, side: 'no' })}
+              style={{
+                width: '114.688px',
+                background: '#faa9ba',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                borderLeft: '1px solid #fff',
+                transition: 'opacity 0.15s',
+              }}
+              onMouseEnter={e => e.currentTarget.style.opacity = '0.82'}
+              onMouseLeave={e => e.currentTarget.style.opacity = '1'}
+            >
+              <span style={{ fontWeight: 'bold', fontSize: '14px', lineHeight: 1.1, color: '#000' }}>
+                {market.no}
+              </span>
+              <span style={{ fontSize: '11px', color: '#444', lineHeight: 1.1 }}>
+                {market.noRate}
               </span>
             </div>
 
             {/* Min/Max info */}
             <div style={{
-              width: '80px',
+              width: '229.376px',
               display: 'flex',
+              flexDirection: 'column',
               alignItems: 'center',
               justifyContent: 'center',
               padding: '0 4px',
@@ -270,9 +306,10 @@ const FancyTable = ({ fancyData, onBetClick }) => {
               textAlign: 'center',
               lineHeight: 1.4,
             }}>
-              Min/Max
-              <br />
-              {market.min} / {market.max}
+              <span style={{ color: '#707c8a' }}>Min/Max</span>
+              <span style={{ fontSize: '13px', color: '#2b3a47', fontWeight: '400' }}>
+                {market.min} / {market.max}
+              </span>
             </div>
           </div>
         ))}

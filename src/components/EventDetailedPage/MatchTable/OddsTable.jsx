@@ -89,24 +89,6 @@ const OddsTable = ({ marketData, onBetClick, marketName = 'Match Odds' }) => {
             </div>
           </div>
 
-          {/* Center Section (Max 8000) */}
-          <div style={{
-            position: 'absolute',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            background: '#cfd8dc',
-            padding: '2px 10px',
-            borderRadius: '4px',
-            fontFamily: 'Tahoma, Helvetica, sans-serif',
-            fontSize: '12px',
-            lineHeight: '16px',
-            fontWeight: '400',
-            letterSpacing: 'normal',
-            color: '#1E1E1E'
-          }}>
-            Max 8000
-          </div>
-
           {/* Right Section */}
           <div style={{ display: 'flex', gap: '15px', alignItems: 'center', paddingRight: '10px' }}>
             <div style={{ color: '#2b3a47', fontWeight: '400' }}>
@@ -130,12 +112,14 @@ const OddsTable = ({ marketData, onBetClick, marketName = 'Match Odds' }) => {
         </div>
       ) : (
         <div className="bg-[#1f2933] text-white flex items-center px-3 py-2">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2 text-gray-300" viewBox="0 0 20 20" fill="currentColor">
-            <path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z" />
-          </svg>
-          <span className="font-bold text-sm">{marketName}</span>
-          <span className="mx-2 text-gray-400">|</span>
-          <span className="text-sm text-gray-300">Zero Commission</span>
+          <div className="flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2 text-gray-300" viewBox="0 0 20 20" fill="currentColor">
+              <path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z" />
+            </svg>
+            <span className="font-bold text-sm">{marketName}</span>
+            <span className="mx-2 text-gray-400">|</span>
+            <span className="text-sm text-gray-300">Zero Commission</span>
+          </div>
         </div>
       )}
 
@@ -155,10 +139,10 @@ const OddsTable = ({ marketData, onBetClick, marketName = 'Match Odds' }) => {
             ...baseFont
           }}>
             <th style={{ textAlign: 'left', paddingLeft: '12px' }}>
-              2 selections
+              {Object.keys(marketData?.runners || {}).length} selections
             </th>
             <th style={{ width: oddsWidth, textAlign: 'center', fontWeight: '700' }}>
-              100.7%
+              
             </th>
             <th style={{ width: oddsWidth }}></th>
             <th style={{ width: oddsWidth, padding: 0, verticalAlign: 'bottom' }}>
@@ -176,72 +160,53 @@ const OddsTable = ({ marketData, onBetClick, marketName = 'Match Odds' }) => {
               </div>
             </th>
             <th style={{ width: oddsWidth }}></th>
-            <th style={{ width: oddsWidth, textAlign: 'right', paddingRight: '12px', fontWeight: '700' }}>
-              99%
+            <th style={{ width: 'auto', textAlign: 'right', paddingRight: '12px', fontWeight: '700' }}>
+              <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end', alignItems: 'center' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '2px', fontSize: '11px' }}>
+                  <span style={{ background: '#4b5965', color: '#fff', padding: '1px 4px', borderRadius: '2px', fontSize: '10px' }}>Min</span>
+                  <span>{marketData?.min || '0'}</span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '2px', fontSize: '11px' }}>
+                  <span style={{ background: '#4b5965', color: '#fff', padding: '1px 4px', borderRadius: '2px', fontSize: '10px' }}>Max</span>
+                  <span>{marketData?.max || '0'}</span>
+                </div>
+              </div>
             </th>
           </tr>
         </thead>
 
         <tbody style={{ backgroundColor: 'white' }}>
-          <tr style={{ height: uniformHeight, borderBottom: '1px solid #e4e7ed' }}>
-            <td style={{ paddingLeft: '16px', fontWeight: '700', color: '#2b3a47', borderRight: '1px solid #e4e7ed' }}>
-              Canada
-            </td>
-            <td style={cellStyle('#e2f2fe')}>
-              <div style={{ fontWeight: '700' }}>1.17</div>
-              <div style={{ fontSize: '10px', color: '#707c8a' }}>213K</div>
-            </td>
-            <td style={cellStyle('#add8f4')}>
-              <div style={{ fontWeight: '700' }}>1.18</div>
-              <div style={{ fontSize: '10px', color: '#707c8a' }}>24,332</div>
-            </td>
-            <td style={cellStyle('#72bbef')}>
-              <div style={{ fontWeight: '700' }}>1.19</div>
-              <div style={{ fontSize: '10px' }}>24,872</div>
-            </td>
-            <td style={cellStyle('#faa9ba')}>
-              <div style={{ fontWeight: '700' }}>1.2</div>
-              <div style={{ fontSize: '10px' }}>63,093</div>
-            </td>
-            <td style={cellStyle('#fbcbd5')}>
-              <div style={{ fontWeight: '700' }}>1.21</div>
-              <div style={{ fontSize: '10px', color: '#707c8a' }}>85,088</div>
-            </td>
-            <td style={{ ...cellStyle('#fde4ea'), borderRight: 'none' }}>
-              <div style={{ fontWeight: '700' }}>1.22</div>
-              <div style={{ fontSize: '10px', color: '#707c8a' }}>165K</div>
-            </td>
-          </tr>
-
-          <tr style={{ height: uniformHeight }}>
-            <td style={{ paddingLeft: '16px', fontWeight: '700', color: '#2b3a47', borderRight: '1px solid #e4e7ed' }}>
-              United Arab Emirates
-            </td>
-            <td style={cellStyle('#e2f2fe')}>
-              <div style={{ fontWeight: '700' }}>5.6</div>
-              <div style={{ fontSize: '10px', color: '#707c8a' }}>188</div>
-            </td>
-            <td style={cellStyle('#add8f4')}>
-              <div style={{ fontWeight: '700' }}>5.7</div>
-              <div style={{ fontSize: '10px', color: '#707c8a' }}>18,483</div>
-            </td>
-            <td style={cellStyle('#72bbef')}>
-              <div style={{ fontWeight: '700' }}>6</div>
-              <div style={{ fontSize: '10px' }}>12,670</div>
-            </td>
-            <td style={cellStyle('#faa9ba')}>
-              <div style={{ fontWeight: '700' }}>6.4</div>
-              <div style={{ fontSize: '10px' }}>4,680</div>
-            </td>
-            <td style={cellStyle('#fbcbd5')}>
-              <div style={{ fontWeight: '700' }}>6.6</div>
-              <div style={{ fontSize: '10px', color: '#707c8a' }}>4,347</div>
-            </td>
-            <td style={{ ...cellStyle('#fde4ea'), borderRight: 'none' }}>
-              <div style={{ fontWeight: '700' }}>6.8</div>
-              <div style={{ fontSize: '10px', color: '#707c8a' }}>5</div>
-            </td>
-          </tr>
+          {Object.values(marketData?.runners || {}).map((runner, idx) => (
+            <tr key={idx} style={{ height: uniformHeight, borderBottom: '1px solid #e4e7ed' }}>
+              <td style={{ paddingLeft: '16px', fontWeight: '700', color: '#2b3a47', borderRight: '1px solid #e4e7ed' }}>
+                {runner.RunnerName}
+              </td>
+              <td style={cellStyle('#e2f2fe')} onClick={() => onBetClick(runner.RunnerName, 'back', 0)}>
+                <div style={{ fontWeight: '700' }}>-</div>
+                <div style={{ fontSize: '10px', color: '#707c8a' }}>-</div>
+              </td>
+              <td style={cellStyle('#add8f4')} onClick={() => onBetClick(runner.RunnerName, 'back', 0)}>
+                <div style={{ fontWeight: '700' }}>-</div>
+                <div style={{ fontSize: '10px', color: '#707c8a' }}>-</div>
+              </td>
+              <td style={cellStyle('#72bbef')} onClick={() => onBetClick(runner.RunnerName, 'back', 0)}>
+                <div style={{ fontWeight: '700' }}>-</div>
+                <div style={{ fontSize: '10px' }}>-</div>
+              </td>
+              <td style={cellStyle('#faa9ba')} onClick={() => onBetClick(runner.RunnerName, 'lay', 0)}>
+                <div style={{ fontWeight: '700' }}>-</div>
+                <div style={{ fontSize: '10px' }}>-</div>
+              </td>
+              <td style={cellStyle('#fbcbd5')} onClick={() => onBetClick(runner.RunnerName, 'lay', 0)}>
+                <div style={{ fontWeight: '700' }}>-</div>
+                <div style={{ fontSize: '10px', color: '#707c8a' }}>-</div>
+              </td>
+              <td style={{ ...cellStyle('#fde4ea'), borderRight: 'none' }} onClick={() => onBetClick(runner.RunnerName, 'lay', 0)}>
+                <div style={{ fontWeight: '700' }}>-</div>
+                <div style={{ fontSize: '10px', color: '#707c8a' }}>-</div>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>

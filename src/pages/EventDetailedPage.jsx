@@ -220,34 +220,67 @@ const EventDetailedPage = () => {
           </ul>
           {/* Market content area */}
           <div className="p-4 flex-1 overflow-y-auto">
-            {/* Odds Table */}
-            <OddsTable
-              marketData={{}}
-              onBetClick={(runner, type, price) => handleBetClick(runner, type, price, 'Match Odds')}
-            />
+            {/* Extract Markets */}
+            {(() => {
+              const eventList = Object.values(gameData?.events || {});
+              const matchOdds = eventList.find(e => e.Type === 'ODDS');
+              const bookmaker = eventList.find(e => e.Type === 'BOOKMAKER' && e.name?.includes('Book Maker'));
+              const winTheToss = eventList.find(e => e.name === 'TO WIN THE TOSS');
+              const tiedMatch = eventList.find(e => e.name === 'Tied Match');
+              const lineMarket = eventList.find(e => e.Type === 'LINE');
+              const fancyMarkets = eventList.filter(e => e.Type === 'FANCY');
 
-            {/* Bookmaker Table */}
-            <BookmakerTable
-              onBetClick={(runner, type, price) => handleBetClick(runner, type, price, 'Bookmaker')}
-            />
+              return (
+                <>
+                  {/* Odds Table */}
+                  {matchOdds && (
+                    <OddsTable
+                      marketData={matchOdds}
+                      onBetClick={(runner, type, price) => handleBetClick(runner, type, price, 'Match Odds')}
+                    />
+                  )}
 
-            <OddsTable
-              marketName="Win The Toss"
-              marketData={{}}
-              onBetClick={(runner, type, price) => handleBetClick(runner, type, price, 'Win The Toss')}
-            />
+                  {/* Bookmaker Table */}
+                  {bookmaker && (
+                    <BookmakerTable
+                      bookmakerData={bookmaker}
+                      onBetClick={(runner, type, price) => handleBetClick(runner, type, price, 'Bookmaker')}
+                    />
+                  )}
 
-            <OddsTable
-              marketName="Line Market"
-              marketData={{}}
-              onBetClick={(runner, type, price) => handleBetClick(runner, type, price, 'Line Market')}
-            />
-            <OddsTable
-              marketName="Tied Match"
-              marketData={{}}
-              onBetClick={(runner, type, price) => handleBetClick(runner, type, price, 'Line Market')}
-            />
-            <FancyTable />
+                  {winTheToss && (
+                    <OddsTable
+                      marketName="Win The Toss"
+                      marketData={winTheToss}
+                      onBetClick={(runner, type, price) => handleBetClick(runner, type, price, 'Win The Toss')}
+                    />
+                  )}
+
+                  {lineMarket && (
+                    <OddsTable
+                      marketName="Line Market"
+                      marketData={lineMarket}
+                      onBetClick={(runner, type, price) => handleBetClick(runner, type, price, 'Line Market')}
+                    />
+                  )}
+                  
+                  {tiedMatch && (
+                    <OddsTable
+                      marketName="Tied Match"
+                      marketData={tiedMatch}
+                      onBetClick={(runner, type, price) => handleBetClick(runner, type, price, 'Tied Match')}
+                    />
+                  )}
+
+                  {fancyMarkets.length > 0 && (
+                    <FancyTable 
+                      fancyData={fancyMarkets}
+                      onBetClick={(bet) => handleBetClick(bet.name, bet.side, bet.price, 'Fancy Bet')}
+                    />
+                  )}
+                </>
+              );
+            })()}
           </div>
         </div>
       </EventLayout>
