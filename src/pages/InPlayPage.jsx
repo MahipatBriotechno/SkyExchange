@@ -63,13 +63,34 @@ function EventRow({ evt, odds, sportName }) {
         >
           {evt.name}
         </a>
-        <div className="event-meta">
-          <span style={{color: isLive ? '#2a9c39' : '#333', fontWeight: 'bold'}}>{evt.status}</span>
+        <div className="event-meta flex items-center gap-1 mt-0.5">
+          <span style={{color: isLive ? '#2a9c39' : '#333', fontWeight: 'bold', fontSize: '11px'}}>{evt.status}</span>
+          
+          <div className="flex items-center gap-1 ml-1">
+            {evt.hasTV && (
+              <div className="w-[18px] h-[15px] bg-[#3498db] rounded-[2px] flex items-center justify-center shadow-sm border border-[#2980b9]" title="Live TV">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                  <line x1="8" y1="21" x2="16" y2="21"></line>
+                  <line x1="12" y1="17" x2="12" y2="21"></line>
+                </svg>
+              </div>
+            )}
+            {evt.hasBM && (
+              <div className="px-1 h-[15px] bg-[#e67e22] rounded-[2px] flex items-center justify-center shadow-sm border border-[#d35400]" title="Bookmaker">
+                <span style={{ fontSize: '9px', fontWeight: '900', color: '#fff', lineHeight: 1 }}>BM</span>
+              </div>
+            )}
+            {evt.hasF && (
+              <div className="w-[15px] h-[15px] bg-[#9b59b6] rounded-[2px] flex items-center justify-center shadow-sm border border-[#8e44ad]" title="Fancy">
+                <span style={{ fontSize: '9px', fontWeight: '900', color: '#fff', lineHeight: 1 }}>F</span>
+              </div>
+            )}
+          </div>
+
           {evt.hasE && <span className="tag tag-gray">E</span>}
           {evt.hasS && <span className="tag">S</span>}
           {evt.hasC && <span className="tag">C</span>}
-          {evt.hasF && <span className="tag tag-fancy">F</span>}
-          {evt.hasBM && <span className="tag tag-bm">BM</span>}
           {evt.hasP && <span className="tag tag-orange">P</span>}
         </div>
       </td>
@@ -96,9 +117,6 @@ function EventRow({ evt, odds, sportName }) {
         )}
       </td>
 
-      <td className="col-matched custom-w">
-        <span style={{ fontSize: '11px', color: '#666' }}>{evt.matched}</span>
-      </td>
       <td className="col-plus"><span className="plus-btn">+</span></td>
     </tr>
   );
@@ -231,14 +249,14 @@ function InPlayPage() {
         id: id || Math.random(),
         marketId: mId,
         name,
-        matched: m.Matched || m.matched || '0',
         startTime: startTimeStr,
         hasE: false, 
         hasS: !!(m.hasS || m.s || m.isSuspended), 
         hasC: false, 
-        hasF: !!(m.f || m.fancy), 
+        hasF: !!(m.f || m.fancy || m.Fancy === 'Y'),
         hasP: false,
-        hasBM: !!(m.bm || m.bookmaker),
+        hasBM: !!(m.bm || m.bookmaker || m.BM === 'Y'),
+        hasTV: !!(m.tv || m.TV === 'Y' || m.isTV === 'Y'),
         isWinner: isWinnerMarket
       };
 
@@ -284,7 +302,6 @@ function InPlayPage() {
                       <span>2</span>
                   </div>
               </th>
-              <th className="col-matched custom-w">Matched</th>
               <th className="col-plus"></th>
             </tr>
           </thead>

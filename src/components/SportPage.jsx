@@ -67,16 +67,34 @@ function MatchRow({ match, odds, sport }) {
             {match.name}
           </a>
         </div>
-        <div className="event-sub">
+        <div className="event-sub flex items-center gap-1">
           <span style={{ color: isLive ? '#008000' : '#333', fontWeight: 'bold' }}>{match.status}</span>
-          {match.hasBM && <span className="tag tag-bm" style={{marginLeft: '5px'}}>BM</span>}
-          {match.hasF && <span className="tag tag-fancy" style={{marginLeft: '5px'}}>F</span>}
+          
+          <div className="flex items-center gap-1 ml-1">
+            {match.hasTV && (
+              <div className="w-[18px] h-[15px] bg-[#3498db] rounded-[2px] flex items-center justify-center shadow-sm border border-[#2980b9]" title="Live TV">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                  <line x1="8" y1="21" x2="16" y2="21"></line>
+                  <line x1="12" y1="17" x2="12" y2="21"></line>
+                </svg>
+              </div>
+            )}
+            {match.hasBM && (
+              <div className="px-1 h-[15px] bg-[#e67e22] rounded-[2px] flex items-center justify-center shadow-sm border border-[#d35400]" title="Bookmaker">
+                <span style={{ fontSize: '9px', fontWeight: '900', color: '#fff', lineHeight: 1 }}>BM</span>
+              </div>
+            )}
+            {match.hasF && (
+              <div className="w-[15px] h-[15px] bg-[#9b59b6] rounded-[2px] flex items-center justify-center shadow-sm border border-[#8e44ad]" title="Fancy">
+                <span style={{ fontSize: '9px', fontWeight: '900', color: '#fff', lineHeight: 1 }}>F</span>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
-      <div className="col-matched">
-        <span>{match.matched || '0'}</span>
-      </div>
+
 
       <div className="col-odds" style={{ position: 'relative' }}>
           <div className="odds-box back">{prices[0].back}</div>
@@ -167,11 +185,11 @@ function SportPageWithLayout({
                 marketId: m.MarketId || m.marketid,
                 name,
                 status: (startTime && startTime <= now) || isWinnerMarket ? 'In-Play' : (startTimeStr.split(' ')[1] || startTimeStr),
-                matched: m.Matched || m.matched || '0',
                 startTime: startTimeStr,
                 isWinner: isWinnerMarket,
-                hasBM: !!(m.bm || m.bookmaker),
-                hasF: !!(m.f || m.fancy)
+                hasBM: !!(m.bm || m.bookmaker || m.BM === 'Y'),
+                hasTV: !!(m.tv || m.TV === 'Y' || m.isTV === 'Y'),
+                hasF: !!(m.f || m.fancy || m.Fancy === 'Y')
             };
         });
         setMatches(processed);
@@ -275,7 +293,6 @@ function SportPageWithLayout({
 
               <div className={`sports-table-head desktop-grid ${sport === 'Tennis' ? 'tennis-grid' : ''}`}>
                 <div className="col-event">Event</div>
-                <div className="col-matched" style={{ paddingLeft: '10px' }}>Matched</div>
                 <div className="col-odds-1" style={{ justifyContent: 'center', fontWeight: 'bold' }}>1</div>
                 {sport !== 'Tennis' && <div className="col-odds-1" style={{ justifyContent: 'center', fontWeight: 'bold' }}>X</div>}
                 <div className="col-odds-1" style={{ justifyContent: 'center', fontWeight: 'bold' }}>2</div>
