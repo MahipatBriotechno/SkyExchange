@@ -73,13 +73,13 @@ const BookmakerTable = ({ bookmakerData, onBetClick, liveRates = {} }) => {
           <div className="w-[688.128px] flex text-center">
             <div className="w-[114.688px]"></div>
             <div className="w-[114.688px]"></div>
-            <div 
+            <div
               className="w-[114.688px] flex items-center justify-center"
               style={{ fontFamily: 'Tahoma, Helvetica, sans-serif', fontSize: '12px', lineHeight: '22px', fontWeight: 400, letterSpacing: 'normal', color: '#1E1E1E' }}
             >
               Back
             </div>
-            <div 
+            <div
               className="w-[114.688px] flex items-center justify-center"
               style={{ fontFamily: 'Tahoma, Helvetica, sans-serif', fontSize: '12px', lineHeight: '22px', fontWeight: 400, letterSpacing: 'normal', color: '#1E1E1E' }}
             >
@@ -99,84 +99,114 @@ const BookmakerTable = ({ bookmakerData, onBetClick, liveRates = {} }) => {
             const suspensionMsg = rates?.suspensionMsg || marketSuspensionMsg;
 
             return (
-              <div key={idx} className="flex border-b border-[#e5e5e5] bg-[#fffce3] min-h-[42px]">
-                {/* Runner Name */}
-                <div className="flex-1 px-4 flex flex-col justify-center border-r border-[#e4e7ed]">
-                  <span className="font-bold text-sm text-black">{runner.RunnerName}</span>
-                </div>
-
-                {/* Odds Area */}
-                <div className="relative flex w-[688.128px] h-[42px]">
-                  {/* Back 3 */}
-                  <div
-                    className="flex flex-col items-center justify-center bg-[#e4eff6] cursor-pointer hover:opacity-80 transition-opacity border-r border-white/50"
-                    style={{ fontFamily: 'Tahoma, Helvetica, sans-serif', fontSize: '12px', lineHeight: '15px', fontWeight: 400, letterSpacing: 'normal', color: '#1E1E1E', width: '114.688px', height: '42px', boxSizing: 'border-box' }}
-                    onClick={() => !isSuspended && onBetClick(runner.RunnerName, 'back', rates?.back?.p3)}
-                  >
-                    <span className="font-bold">{rates?.back?.p3 || '-'}</span>
-                    <span className="text-[10px] text-gray-500">{rates?.back?.v3 || '-'}</span>
-                  </div>
-                  
-                  {/* Back 2 */}
-                  <div
-                    className="flex flex-col items-center justify-center bg-[#cfe3f1] cursor-pointer hover:opacity-80 transition-opacity border-r border-white/50"
-                    style={{ fontFamily: 'Tahoma, Helvetica, sans-serif', fontSize: '12px', lineHeight: '15px', fontWeight: 400, letterSpacing: 'normal', color: '#1E1E1E', width: '114.688px', height: '42px', boxSizing: 'border-box' }}
-                    onClick={() => !isSuspended && onBetClick(runner.RunnerName, 'back', rates?.back?.p2)}
-                  >
-                    <span className="font-bold">{rates?.back?.p2 || '-'}</span>
-                    <span className="text-[10px] text-gray-500">{rates?.back?.v2 || '-'}</span>
+              <React.Fragment key={idx}>
+                <div className="flex border-b border-[#e5e5e5] bg-[#fffce3] min-h-[42px]">
+                  {/* Runner Name */}
+                  <div className="flex-1 px-4 flex flex-col justify-center border-r border-[#e4e7ed]">
+                    <span className="font-bold text-sm text-black">{runner.RunnerName}</span>
                   </div>
 
-                  {/* Back 1 (Main) */}
-                  <div
-                    className="flex flex-col items-center justify-center bg-[#72bbef] border border-white cursor-pointer hover:opacity-80 transition-opacity"
-                    style={{ fontFamily: 'Tahoma, Helvetica, sans-serif', fontSize: '12px', lineHeight: '15px', fontWeight: 400, letterSpacing: 'normal', color: '#1E1E1E', width: '114.688px', height: '42px', boxSizing: 'border-box' }}
-                    onClick={() => !isSuspended && onBetClick(runner.RunnerName, 'back', rates?.back?.p1)}
-                  >
-                    <span className="font-bold">{rates?.back?.p1 || '-'}</span>
-                    <span className="text-[10px]">{rates?.back?.v1 || '-'}</span>
-                  </div>
-
-                  {/* Lay 1 (Main) */}
-                  <div
-                    className="flex flex-col items-center justify-center bg-[#faa9ba] border border-white cursor-pointer hover:opacity-80 transition-opacity"
-                    style={{ fontFamily: 'Tahoma, Helvetica, sans-serif', fontSize: '12px', lineHeight: '15px', fontWeight: 400, letterSpacing: 'normal', color: '#1E1E1E', width: '114.688px', height: '42px', boxSizing: 'border-box' }}
-                    onClick={() => !isSuspended && onBetClick(runner.RunnerName, 'lay', rates?.lay?.p1)}
-                  >
-                    <span className="font-bold">{rates?.lay?.p1 || '-'}</span>
-                    <span className="text-[10px]">{rates?.lay?.v1 || '-'}</span>
-                  </div>
-
-                  {/* Lay 2 */}
-                  <div
-                    className="flex flex-col items-center justify-center bg-[#f2cfd5] cursor-pointer hover:opacity-80 transition-opacity border-l border-white/50"
-                    style={{ fontFamily: 'Tahoma, Helvetica, sans-serif', fontSize: '12px', lineHeight: '15px', fontWeight: 400, letterSpacing: 'normal', color: '#1E1E1E', width: '114.688px', height: '42px', boxSizing: 'border-box' }}
-                    onClick={() => !isSuspended && onBetClick(runner.RunnerName, 'lay', rates?.lay?.p2)}
-                  >
-                    <span className="font-bold">{rates?.lay?.p2 || '-'}</span>
-                    <span className="text-[10px] text-gray-500">{rates?.lay?.v2 || '-'}</span>
-                  </div>
-
-                  {/* Lay 3 */}
-                  <div
-                    className="flex flex-col items-center justify-center bg-[#f6e3e7] cursor-pointer hover:opacity-80 transition-opacity border-l border-white/50"
-                    style={{ fontFamily: 'Tahoma, Helvetica, sans-serif', fontSize: '12px', lineHeight: '15px', fontWeight: 400, letterSpacing: 'normal', color: '#1E1E1E', width: '114.688px', height: '42px', boxSizing: 'border-box' }}
-                    onClick={() => !isSuspended && onBetClick(runner.RunnerName, 'lay', rates?.lay?.p3)}
-                  >
-                    <span className="font-bold">{rates?.lay?.p3 || '-'}</span>
-                    <span className="text-[10px] text-gray-500">{rates?.lay?.v3 || '-'}</span>
-                  </div>
-
-                  {/* Single Suspension Overlay across all 6 cells */}
-                  {isSuspended && (
-                    <div style={{ ...suspensionOverlayStyle, width: '100%' }}>
-                      <span style={suspensionTextStyle}>{suspensionMsg}</span>
+                  {/* Odds Area */}
+                  <div className="relative flex w-[688.128px] h-[42px]">
+                    {/* Back 3 */}
+                    <div
+                      className="flex flex-col items-center justify-center bg-[#e4eff6] cursor-pointer hover:opacity-80 transition-opacity border-r border-white/50"
+                      style={{ fontFamily: 'Tahoma, Helvetica, sans-serif', fontSize: '12px', lineHeight: '15px', fontWeight: 400, letterSpacing: 'normal', color: '#1E1E1E', width: '114.688px', height: '42px', boxSizing: 'border-box' }}
+                      onClick={() => !isSuspended && onBetClick(runner.RunnerName, 'back', rates?.back?.p3)}
+                    >
+                      <span className="font-bold">{rates?.back?.p3 || '-'}</span>
+                      <span className="text-[10px] text-gray-500">{rates?.back?.v3 || '-'}</span>
                     </div>
-                  )}
+
+                    {/* Back 2 */}
+                    <div
+                      className="flex flex-col items-center justify-center bg-[#cfe3f1] cursor-pointer hover:opacity-80 transition-opacity border-r border-white/50"
+                      style={{ fontFamily: 'Tahoma, Helvetica, sans-serif', fontSize: '12px', lineHeight: '15px', fontWeight: 400, letterSpacing: 'normal', color: '#1E1E1E', width: '114.688px', height: '42px', boxSizing: 'border-box' }}
+                      onClick={() => !isSuspended && onBetClick(runner.RunnerName, 'back', rates?.back?.p2)}
+                    >
+                      <span className="font-bold">{rates?.back?.p2 || '-'}</span>
+                      <span className="text-[10px] text-gray-500">{rates?.back?.v2 || '-'}</span>
+                    </div>
+
+                    {/* Back 1 (Main) */}
+                    <div
+                      className="flex flex-col items-center justify-center bg-[#72bbef] border border-white cursor-pointer hover:opacity-80 transition-opacity"
+                      style={{ fontFamily: 'Tahoma, Helvetica, sans-serif', fontSize: '12px', lineHeight: '15px', fontWeight: 400, letterSpacing: 'normal', color: '#1E1E1E', width: '114.688px', height: '42px', boxSizing: 'border-box' }}
+                      onClick={() => !isSuspended && onBetClick(runner.RunnerName, 'back', rates?.back?.p1)}
+                    >
+                      <span className="font-bold">{rates?.back?.p1 || '-'}</span>
+                      <span className="text-[10px]">{rates?.back?.v1 || '-'}</span>
+                    </div>
+
+                    {/* Lay 1 (Main) */}
+                    <div
+                      className="flex flex-col items-center justify-center bg-[#faa9ba] border border-white cursor-pointer hover:opacity-80 transition-opacity"
+                      style={{ fontFamily: 'Tahoma, Helvetica, sans-serif', fontSize: '12px', lineHeight: '15px', fontWeight: 400, letterSpacing: 'normal', color: '#1E1E1E', width: '114.688px', height: '42px', boxSizing: 'border-box' }}
+                      onClick={() => !isSuspended && onBetClick(runner.RunnerName, 'lay', rates?.lay?.p1)}
+                    >
+                      <span className="font-bold">{rates?.lay?.p1 || '-'}</span>
+                      <span className="text-[10px]">{rates?.lay?.v1 || '-'}</span>
+                    </div>
+
+                    {/* Lay 2 */}
+                    <div
+                      className="flex flex-col items-center justify-center bg-[#f2cfd5] cursor-pointer hover:opacity-80 transition-opacity border-l border-white/50"
+                      style={{ fontFamily: 'Tahoma, Helvetica, sans-serif', fontSize: '12px', lineHeight: '15px', fontWeight: 400, letterSpacing: 'normal', color: '#1E1E1E', width: '114.688px', height: '42px', boxSizing: 'border-box' }}
+                      onClick={() => !isSuspended && onBetClick(runner.RunnerName, 'lay', rates?.lay?.p2)}
+                    >
+                      <span className="font-bold">{rates?.lay?.p2 || '-'}</span>
+                      <span className="text-[10px] text-gray-500">{rates?.lay?.v2 || '-'}</span>
+                    </div>
+
+                    {/* Lay 3 */}
+                    <div
+                      className="flex flex-col items-center justify-center bg-[#f6e3e7] cursor-pointer hover:opacity-80 transition-opacity border-l border-white/50"
+                      style={{ fontFamily: 'Tahoma, Helvetica, sans-serif', fontSize: '12px', lineHeight: '15px', fontWeight: 400, letterSpacing: 'normal', color: '#1E1E1E', width: '114.688px', height: '42px', boxSizing: 'border-box' }}
+                      onClick={() => !isSuspended && onBetClick(runner.RunnerName, 'lay', rates?.lay?.p3)}
+                    >
+                      <span className="font-bold">{rates?.lay?.p3 || '-'}</span>
+                      <span className="text-[10px] text-gray-500">{rates?.lay?.v3 || '-'}</span>
+                    </div>
+
+                    {/* Single Suspension Overlay across all 6 cells */}
+                    {isSuspended && (
+                      <div style={{ ...suspensionOverlayStyle, width: '100%' }}>
+                        <span style={suspensionTextStyle}>{suspensionMsg}</span>
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
+
+                {/* Runner Message Row */}
+                {runner.Msg && runner.Msg !== '' && (
+                  <div className="flex border-b border-[#e5e5e5] bg-[#1a1a1a] py-0.5 px-4 overflow-hidden">
+                    <div className="flex items-center gap-2 w-full h-[20px]">
+
+                      <div className="flex-1 overflow-hidden whitespace-nowrap">
+                        <span className="animate-ticker text-[10px] font-black text-white uppercase tracking-wider">
+                          {runner.Msg}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </React.Fragment>
             );
           })}
+
+          {/* Market-level Message Row */}
+          {bookmakerData?.Msg && bookmakerData?.Msg !== '' && (
+            <div className="flex border-b border-[#e5e5e5] bg-[#1a1a1a] py-0.5 px-4 overflow-hidden">
+              <div className="flex items-center gap-2 w-full h-[20px]">
+
+                <div className="flex-1 overflow-hidden whitespace-nowrap">
+                  <span className="animate-ticker text-[10px] font-black text-white uppercase tracking-wider">
+                    {bookmakerData.Msg}
+                  </span>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

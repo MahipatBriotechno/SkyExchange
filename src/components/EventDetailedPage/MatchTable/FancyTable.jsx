@@ -23,8 +23,13 @@ const DEMO_MARKETS = [
 const FancyTable = ({ fancyData, onBetClick, liveRates = {} }) => {
   const [activeTab, setActiveTab] = useState('All');
 
-  const allMarkets = fancyData && fancyData.length > 0 
-    ? fancyData.map(m => ({
+  const allMarkets = fancyData && fancyData.length > 0
+    ? fancyData.map(m => {
+      const runners = m.runners ? Object.values(m.runners) : [];
+      const runnerMsgs = runners.map(r => r.Msg || r.msg).filter(Boolean);
+      const combinedMsg = [m.Msg, ...runnerMsgs].filter(Boolean).join(' | ');
+
+      return {
         id: m.eid || m.MarketId || m.marketid,
         name: m.name,
         no: '-',
@@ -34,7 +39,9 @@ const FancyTable = ({ fancyData, onBetClick, liveRates = {} }) => {
         min: m.min,
         max: m.max,
         subType: m.SubType,
-      }))
+        msg: combinedMsg,
+      };
+    })
     : DEMO_MARKETS;
 
   const markets = allMarkets.filter(m => {
@@ -221,111 +228,126 @@ const FancyTable = ({ fancyData, onBetClick, liveRates = {} }) => {
           const { isSuspended, msg: suspensionMsg } = getMarketStatus(rateData, 'FANCY');
 
           return (
-            <div
-              key={market.id ?? idx}
-              style={{
-                display: 'flex',
-                alignItems: 'stretch',
-                borderBottom: '1px solid #e8e8e8',
-                minHeight: '40px',
-              }}
-            >
-              {/* Market name */}
-              <div style={{
-                flex: 1,
-                display: 'flex',
-                alignItems: 'center',
-                padding: '4px 16px',
-                fontSize: '13px',
-                fontWeight: '600',
-                color: '#222',
-                borderRight: '1px solid #e8e8e8',
-              }}>
-                {market.name}
-              </div>
-
-              {/* Left spacer for alignment */}
-              <div style={{ width: '229.376px' }} />
-
-              {/* Betting Cells Container for single overlay */}
-              <div style={{ display: 'flex', position: 'relative' }}>
-                {/* no (Lay / pink) cell */}
-                <div
-                  onClick={() => !isSuspended && onBetClick && onBetClick({ name: market.name, side: 'no', price: rates?.lay?.p1 })}
-                  style={{
-                    width: '114.688px',
-                    background: '#faa9ba',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    cursor: 'pointer',
-                    borderLeft: '1px solid #fff',
-                    transition: 'opacity 0.15s',
-                  }}
-                >
-                  <span style={{ fontWeight: 'bold', fontSize: '14px', lineHeight: 1.1, color: '#000' }}>
-                    {rates?.lay?.p1 || '-'}
-                  </span>
-                  <span style={{ fontSize: '11px', color: '#444', lineHeight: 1.1 }}>
-                    {rates?.lay?.v1 || '-'}
-                  </span>
+            <React.Fragment key={market.id ?? idx}>
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'stretch',
+                  borderBottom: '1px solid #e8e8e8',
+                  minHeight: '40px',
+                }}
+              >
+                {/* Market name */}
+                <div style={{
+                  flex: 1,
+                  display: 'flex',
+                  alignItems: 'center',
+                  padding: '4px 16px',
+                  fontSize: '13px',
+                  fontWeight: '600',
+                  color: '#222',
+                  borderRight: '1px solid #e8e8e8',
+                }}>
+                  {market.name}
                 </div>
 
-                {/* yes (Back / blue) cell */}
-                <div
-                  onClick={() => !isSuspended && onBetClick && onBetClick({ name: market.name, side: 'yes', price: rates?.back?.p1 })}
-                  style={{
-                    width: '114.688px',
-                    background: '#72bbef',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    cursor: 'pointer',
-                    borderLeft: '1px solid #fff',
-                    transition: 'opacity 0.15s',
-                  }}
-                >
-                  <span style={{ fontWeight: 'bold', fontSize: '14px', lineHeight: 1.1, color: '#000' }}>
-                    {rates?.back?.p1 || '-'}
-                  </span>
-                  <span style={{ fontSize: '11px', color: '#444', lineHeight: 1.1 }}>
-                    {rates?.back?.v1 || '-'}
-                  </span>
-                </div>
+                {/* Left spacer for alignment */}
+                <div style={{ width: '229.376px' }} />
 
-                {/* Single Suspension Overlay across both cells */}
-                {isSuspended && (
-                  <div style={{
-                    ...suspensionOverlayStyle,
-                    width: '100%',
-                    borderLeft: '1px solid #fff'
-                  }}>
-                    <span style={suspensionTextStyle}>{suspensionMsg}</span>
+                {/* Betting Cells Container for single overlay */}
+                <div style={{ display: 'flex', position: 'relative' }}>
+                  {/* no (Lay / pink) cell */}
+                  <div
+                    onClick={() => !isSuspended && onBetClick && onBetClick({ name: market.name, side: 'no', price: rates?.lay?.p1 })}
+                    style={{
+                      width: '114.688px',
+                      background: '#faa9ba',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      cursor: 'pointer',
+                      borderLeft: '1px solid #fff',
+                      transition: 'opacity 0.15s',
+                    }}
+                  >
+                    <span style={{ fontWeight: 'bold', fontSize: '14px', lineHeight: 1.1, color: '#000' }}>
+                      {rates?.lay?.p1 || '-'}
+                    </span>
+                    <span style={{ fontSize: '11px', color: '#444', lineHeight: 1.1 }}>
+                      {rates?.lay?.v1 || '-'}
+                    </span>
                   </div>
-                )}
+
+                  {/* yes (Back / blue) cell */}
+                  <div
+                    onClick={() => !isSuspended && onBetClick && onBetClick({ name: market.name, side: 'yes', price: rates?.back?.p1 })}
+                    style={{
+                      width: '114.688px',
+                      background: '#72bbef',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      cursor: 'pointer',
+                      borderLeft: '1px solid #fff',
+                      transition: 'opacity 0.15s',
+                    }}
+                  >
+                    <span style={{ fontWeight: 'bold', fontSize: '14px', lineHeight: 1.1, color: '#000' }}>
+                      {rates?.back?.p1 || '-'}
+                    </span>
+                    <span style={{ fontSize: '11px', color: '#444', lineHeight: 1.1 }}>
+                      {rates?.back?.v1 || '-'}
+                    </span>
+                  </div>
+
+                  {/* Single Suspension Overlay across both cells */}
+                  {isSuspended && (
+                    <div style={{
+                      ...suspensionOverlayStyle,
+                      width: '100%',
+                      borderLeft: '1px solid #fff'
+                    }}>
+                      <span style={suspensionTextStyle}>{suspensionMsg}</span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Min/Max info */}
+                <div style={{
+                  width: '229.376px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  padding: '0 4px',
+                  fontSize: '10px',
+                  color: '#777',
+                  textAlign: 'center',
+                  lineHeight: 1.4,
+                }}>
+                  <span style={{ color: '#707c8a' }}>Min/Max</span>
+                  <span style={{ fontSize: '13px', color: '#2b3a47', fontWeight: '400' }}>
+                    {market.min} / {market.max}
+                  </span>
+                </div>
               </div>
 
-              {/* Min/Max info */}
-              <div style={{
-                width: '229.376px',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                padding: '0 4px',
-                fontSize: '10px',
-                color: '#777',
-                textAlign: 'center',
-                lineHeight: 1.4,
-              }}>
-                <span style={{ color: '#707c8a' }}>Min/Max</span>
-                <span style={{ fontSize: '13px', color: '#2b3a47', fontWeight: '400' }}>
-                  {market.min} / {market.max}
-                </span>
-              </div>
-            </div>
+              {/* News Message Row */}
+              {market.msg && market.msg !== '' && (
+                <div style={{ background: '#1a1a1a', padding: '2px 16px', borderBottom: '1px solid #e8e8e8', overflow: 'hidden' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', height: '20px' }}>
+
+                    <div style={{ flex: 1, overflow: 'hidden', whiteSpace: 'nowrap' }}>
+                      <span className="animate-ticker" style={{ fontSize: '10px', fontWeight: '800', color: '#fff', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                        {market.msg}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </React.Fragment>
           );
         })}
       </div>

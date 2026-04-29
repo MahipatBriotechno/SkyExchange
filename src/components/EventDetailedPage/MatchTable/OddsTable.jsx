@@ -173,7 +173,7 @@ const OddsTable = ({ marketData, onBetClick, marketName = 'Match Odds', liveRate
             <th style={{ textAlign: 'left', paddingLeft: '12px', width: 'auto' }}>
               {Object.keys(marketData?.runners || {}).length} selections
             </th>
-            
+
             {/* 6 Fixed Rate Columns */}
             <th style={{ width: oddsWidth }}></th>
             <th style={{ width: oddsWidth }}></th>
@@ -195,13 +195,13 @@ const OddsTable = ({ marketData, onBetClick, marketName = 'Match Odds', liveRate
             <th style={{ width: oddsWidth }}></th>
 
             {/* Floating Min/Max on the right of the header */}
-            <div style={{ 
-              position: 'absolute', 
-              right: '12px', 
-              top: '50%', 
+            <div style={{
+              position: 'absolute',
+              right: '12px',
+              top: '50%',
               transform: 'translateY(-50%)',
-              display: 'flex', 
-              gap: '8px', 
+              display: 'flex',
+              gap: '8px',
               alignItems: 'center',
               zIndex: 5
             }}>
@@ -225,60 +225,94 @@ const OddsTable = ({ marketData, onBetClick, marketName = 'Match Odds', liveRate
             const suspensionMsg = rates?.suspensionMsg || marketSuspensionMsg;
 
             return (
-              <tr key={idx} style={{ height: uniformHeight, borderBottom: '1px solid #e4e7ed' }}>
-                <td style={{ paddingLeft: '16px', fontWeight: '700', color: '#2b3a47', borderRight: '1px solid #e4e7ed' }}>
-                  {runner.RunnerName}
-                </td>
+              <React.Fragment key={idx}>
+                <tr style={{ height: uniformHeight, borderBottom: '1px solid #e4e7ed' }}>
+                  <td style={{ paddingLeft: '16px', fontWeight: '700', color: '#2b3a47', borderRight: '1px solid #e4e7ed' }}>
+                    {runner.RunnerName}
+                  </td>
 
-                <td colSpan={6} style={{ padding: 0, position: 'relative' }}>
-                  <div style={{ display: 'flex', width: '100%', height: uniformHeight }}>
-                    {/* Back 3 */}
-                    <div style={cellStyle('#e2f2fe')} onClick={() => !isSuspended && onBetClick(runner.RunnerName, 'back', rates?.back?.p3)}>
-                      <div style={{ fontWeight: '700' }}>{rates?.back?.p3 || '-'}</div>
-                      <div style={{ fontSize: '10px', color: '#707c8a' }}>{rates?.back?.v3 || '-'}</div>
-                    </div>
-                    
-                    {/* Back 2 */}
-                    <div style={cellStyle('#add8f4')} onClick={() => !isSuspended && onBetClick(runner.RunnerName, 'back', rates?.back?.p2)}>
-                      <div style={{ fontWeight: '700' }}>{rates?.back?.p2 || '-'}</div>
-                      <div style={{ fontSize: '10px', color: '#707c8a' }}>{rates?.back?.v2 || '-'}</div>
-                    </div>
-                    
-                    {/* Back 1 */}
-                    <div style={cellStyle('#72bbef')} onClick={() => !isSuspended && onBetClick(runner.RunnerName, 'back', rates?.back?.p1)}>
-                      <div style={{ fontWeight: '700' }}>{rates?.back?.p1 || '-'}</div>
-                      <div style={{ fontSize: '10px' }}>{rates?.back?.v1 || '-'}</div>
-                    </div>
-                    
-                    {/* Lay 1 */}
-                    <div style={cellStyle('#faa9ba')} onClick={() => !isSuspended && onBetClick(runner.RunnerName, 'lay', rates?.lay?.p1)}>
-                      <div style={{ fontWeight: '700' }}>{rates?.lay?.p1 || '-'}</div>
-                      <div style={{ fontSize: '10px' }}>{rates?.lay?.v1 || '-'}</div>
-                    </div>
-                    
-                    {/* Lay 2 */}
-                    <div style={cellStyle('#fbcbd5')} onClick={() => !isSuspended && onBetClick(runner.RunnerName, 'lay', rates?.lay?.p2)}>
-                      <div style={{ fontWeight: '700' }}>{rates?.lay?.p2 || '-'}</div>
-                      <div style={{ fontSize: '10px', color: '#707c8a' }}>{rates?.lay?.v2 || '-'}</div>
-                    </div>
-                    
-                    {/* Lay 3 */}
-                    <div style={{ ...cellStyle('#fde4ea'), borderRight: 'none' }} onClick={() => !isSuspended && onBetClick(runner.RunnerName, 'lay', rates?.lay?.p3)}>
-                      <div style={{ fontWeight: '700' }}>{rates?.lay?.p3 || '-'}</div>
-                      <div style={{ fontSize: '10px', color: '#707c8a' }}>{rates?.lay?.v3 || '-'}</div>
-                    </div>
-
-                    {/* Single Suspension Overlay across all 6 cells */}
-                    {isSuspended && (
-                      <div style={suspensionOverlayStyle}>
-                        <span style={suspensionTextStyle}>{suspensionMsg}</span>
+                  <td colSpan={6} style={{ padding: 0, position: 'relative' }}>
+                    <div style={{ display: 'flex', width: '100%', height: uniformHeight }}>
+                      {/* Back 3 */}
+                      <div style={cellStyle('#e2f2fe')} onClick={() => !isSuspended && onBetClick(runner.RunnerName, 'back', rates?.back?.p3)}>
+                        <div style={{ fontWeight: '700' }}>{rates?.back?.p3 || '-'}</div>
+                        <div style={{ fontSize: '10px', color: '#707c8a' }}>{rates?.back?.v3 || '-'}</div>
                       </div>
-                    )}
-                  </div>
-                </td>
-              </tr>
+
+                      {/* Back 2 */}
+                      <div style={cellStyle('#add8f4')} onClick={() => !isSuspended && onBetClick(runner.RunnerName, 'back', rates?.back?.p2)}>
+                        <div style={{ fontWeight: '700' }}>{rates?.back?.p2 || '-'}</div>
+                        <div style={{ fontSize: '10px', color: '#707c8a' }}>{rates?.back?.v2 || '-'}</div>
+                      </div>
+
+                      {/* Back 1 */}
+                      <div style={cellStyle('#72bbef')} onClick={() => !isSuspended && onBetClick(runner.RunnerName, 'back', rates?.back?.p1)}>
+                        <div style={{ fontWeight: '700' }}>{rates?.back?.p1 || '-'}</div>
+                        <div style={{ fontSize: '10px' }}>{rates?.back?.v1 || '-'}</div>
+                      </div>
+
+                      {/* Lay 1 */}
+                      <div style={cellStyle('#faa9ba')} onClick={() => !isSuspended && onBetClick(runner.RunnerName, 'lay', rates?.lay?.p1)}>
+                        <div style={{ fontWeight: '700' }}>{rates?.lay?.p1 || '-'}</div>
+                        <div style={{ fontSize: '10px' }}>{rates?.lay?.v1 || '-'}</div>
+                      </div>
+
+                      {/* Lay 2 */}
+                      <div style={cellStyle('#fbcbd5')} onClick={() => !isSuspended && onBetClick(runner.RunnerName, 'lay', rates?.lay?.p2)}>
+                        <div style={{ fontWeight: '700' }}>{rates?.lay?.p2 || '-'}</div>
+                        <div style={{ fontSize: '10px', color: '#707c8a' }}>{rates?.lay?.v2 || '-'}</div>
+                      </div>
+
+                      {/* Lay 3 */}
+                      <div style={{ ...cellStyle('#fde4ea'), borderRight: 'none' }} onClick={() => !isSuspended && onBetClick(runner.RunnerName, 'lay', rates?.lay?.p3)}>
+                        <div style={{ fontWeight: '700' }}>{rates?.lay?.p3 || '-'}</div>
+                        <div style={{ fontSize: '10px', color: '#707c8a' }}>{rates?.lay?.v3 || '-'}</div>
+                      </div>
+
+                      {/* Single Suspension Overlay across all 6 cells */}
+                      {isSuspended && (
+                        <div style={suspensionOverlayStyle}>
+                          <span style={suspensionTextStyle}>{suspensionMsg}</span>
+                        </div>
+                      )}
+                    </div>
+                  </td>
+                </tr>
+
+                {/* Runner Message Row */}
+                {runner.Msg && runner.Msg !== '' && (
+                  <tr style={{ backgroundColor: '#1a1a1a', borderBottom: '1px solid #e4e7ed' }}>
+                    <td colSpan={7} style={{ padding: '2px 16px', overflow: 'hidden' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', height: '20px' }}>
+
+                        <div style={{ flex: 1, overflow: 'hidden', whiteSpace: 'nowrap' }}>
+                          <span className="animate-ticker" style={{ fontSize: '10px', fontWeight: '800', color: '#fff', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                            {runner.Msg}
+                          </span>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                )}
+              </React.Fragment>
             );
           })}
+
+          {/* Market-level Message Row */}
+          {marketData?.Msg && marketData?.Msg !== '' && (
+            <tr style={{ backgroundColor: '#1a1a1a' }}>
+              <td colSpan={7} style={{ padding: '2px 16px', overflow: 'hidden' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', height: '20px' }}>
+
+                  <div style={{ flex: 1, overflow: 'hidden', whiteSpace: 'nowrap' }}>
+                    <span className="animate-ticker" style={{ fontSize: '10px', fontWeight: '800', color: '#fff', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                      {marketData.Msg}
+                    </span>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          )}
         </tbody>
       </table>
     </div>
