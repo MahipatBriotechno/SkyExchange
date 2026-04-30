@@ -29,6 +29,8 @@ import NotFoundPage from './pages/NotFoundPage';
 
 import './App.css';
 
+import Snackbar from './components/Snackbar';
+
 function App() {
   return (
     <Router>
@@ -57,10 +59,11 @@ function App() {
         <Route path="/bets" element={<BetsHistoryPage />} />
         <Route path="/statement" element={<AccountStatementPage />} />
         <Route path="/activity-log" element={<ActivityLogPage />} />
-        <Route path="/deposit" element={<DepositPage />} />
-        <Route path="/withdrawal" element={<WithdrawPage />} />
+        <Route path="/wallet/deposit" element={<DepositPage />} />
+        <Route path="/wallet/withdrawal" element={<WithdrawPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
+      <Snackbar />
     </Router>
   );
 }

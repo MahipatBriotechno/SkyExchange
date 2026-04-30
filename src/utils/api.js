@@ -9,8 +9,16 @@ const API_SECRET = import.meta.env.VITE_API_SECRET || 'F41985E0-D500-4E68-AF71-3
  */
 export async function fetchAPI(endpoint, body = {}) {
   // Use proxy path if needed or direct URL
-  // If we are calling it as FETCH_API='/namecheck', we append it to BASE_URL
   const url = `${API_BASE_URL}${endpoint}`;
+  
+  // 🛡️ Pre-processing: Ensure LoginToken is a string if present
+  if (Object.prototype.hasOwnProperty.call(body, 'LoginToken')) {
+    if (body.LoginToken === null || body.LoginToken === undefined) {
+      console.warn(`[API] LoginToken is null/undefined for ${endpoint}. Defaulting to empty string.`);
+      body.LoginToken = '';
+    }
+  }
+
   const jsonBody = JSON.stringify(body);
 
   // 🔐 Generate Hash (HMAC SHA256 → Base64)

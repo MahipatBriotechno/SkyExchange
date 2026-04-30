@@ -27,9 +27,10 @@ function DesktopHeader({ onVirtualCricketClick }) {
   };
 
   const refreshBalance = async () => {
-    if (!isLoggedIn || !loginToken) return;
+    const token = useAuthStore.getState().getToken();
+    if (!isLoggedIn || !token) return;
     try {
-      const response = await userController.getBalance(loginToken);
+      const response = await userController.getBalance(token);
       if (response.error === '0') {
         setBalanceData({
           balance: response.balance || '0',
@@ -67,11 +68,12 @@ function DesktopHeader({ onVirtualCricketClick }) {
   }, [searchInput]);
 
   const performSearch = async (val) => {
-    if (!isLoggedIn || !loginToken) return;
+    const token = useAuthStore.getState().getToken();
+    if (!isLoggedIn || !token) return;
 
     try {
       setSearchLoading(true);
-      const res = await marketController.search(loginToken, val);
+      const res = await marketController.search(token, val);
       if (Array.isArray(res)) {
         setSearchResults(res);
         setShowSearchResults(true);
@@ -117,7 +119,8 @@ function DesktopHeader({ onVirtualCricketClick }) {
       });
 
       if (response.error === '0') {
-        loginAction(response.username || loginName, response.LoginToken);
+        const token = response.LoginToken || response.apitoken || response.token;
+        loginAction(response.username || loginName, token);
         alert('Login Successful');
         setLoginName('');
         setPassword('');
@@ -289,7 +292,7 @@ function DesktopHeader({ onVirtualCricketClick }) {
             <div className="account-section" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <div className="action-buttons" style={{ display: 'flex', gap: '6px' }}>
                 <Link 
-                  to="/deposit"
+                  to="/wallet/deposit"
                   style={{ 
                     background: '#1e8000', 
                     color: '#fff', 
@@ -314,7 +317,7 @@ function DesktopHeader({ onVirtualCricketClick }) {
                   DEPOSIT
                 </Link>
                 <Link 
-                  to="/withdrawal"
+                  to="/wallet/withdrawal"
                   style={{ 
                     background: '#b80000', 
                     color: '#fff', 

@@ -16,9 +16,10 @@ function MobileHeader() {
   };
 
   const refreshBalance = async () => {
-    if (!isLoggedIn || !loginToken) return;
+    const token = useAuthStore.getState().getToken();
+    if (!isLoggedIn || !token) return;
     try {
-      const response = await userController.getBalance(loginToken);
+      const response = await userController.getBalance(token);
       if (response.error === '0') {
         setBalanceData({
           balance: response.balance || '0',
@@ -58,7 +59,7 @@ function MobileHeader() {
             </div>
             <div className="mobile-action-buttons" style={{ display: 'flex', gap: '4px' }}>
               <Link 
-                to="/deposit"
+                to="/wallet/deposit"
                 style={{ 
                   background: '#1e8000', 
                   color: '#fff', 
@@ -82,7 +83,7 @@ function MobileHeader() {
                 DEPOSIT
               </Link>
               <Link 
-                to="/withdrawal"
+                to="/wallet/withdrawal"
                 style={{ 
                   background: '#b80000', 
                   color: '#fff', 
