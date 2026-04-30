@@ -23,6 +23,8 @@ import FullMarketSoccerPage from './pages/FullMarketSoccerPage';
 import FullMarketTennisPage from './pages/FullMarketTennisPage';
 import FullMarketESoccerPage from './pages/FullMarketESoccerPage';
 import EventDetailedPage from './pages/EventDetailedPage';
+import DepositPage from './pages/DepositPage';
+import WithdrawPage from './pages/WithdrawPage';
 import NotFoundPage from './pages/NotFoundPage';
 
 import './App.css';
@@ -55,6 +57,8 @@ function App() {
         <Route path="/bets" element={<BetsHistoryPage />} />
         <Route path="/statement" element={<AccountStatementPage />} />
         <Route path="/activity-log" element={<ActivityLogPage />} />
+        <Route path="/deposit" element={<DepositPage />} />
+        <Route path="/withdrawal" element={<WithdrawPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </Router>

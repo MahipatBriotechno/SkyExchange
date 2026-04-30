@@ -49,10 +49,63 @@ function MobileHeader() {
             <Link className="login-index ui-link" to="/login">Login</Link>
           </div>
         ) : (
-          <div className="account-wrap">
-            <Link to="/wallet" className="account-number">{username}</Link>
-            <div className="account-balance">
-                <span id="mainBalance"><span className="badge-currency">USD</span> {balanceData.balance}</span>
+          <div className="account-wrap" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '4px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <Link to="/wallet" className="account-number">{username}</Link>
+              <div className="account-balance">
+                  <span id="mainBalance"><span className="badge-currency">USD</span> {balanceData.balance}</span>
+              </div>
+            </div>
+            <div className="mobile-action-buttons" style={{ display: 'flex', gap: '4px' }}>
+              <Link 
+                to="/deposit"
+                style={{ 
+                  background: '#1e8000', 
+                  color: '#fff', 
+                  border: '1px solid #fff', 
+                  borderRadius: '3px', 
+                  padding: '2px 6px', 
+                  fontSize: '10px', 
+                  fontWeight: 'bold', 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  gap: '3px', 
+                  cursor: 'pointer',
+                  textTransform: 'uppercase',
+                  textDecoration: 'none'
+                }}
+              >
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M19 5c-1.5 0-2.8 1.4-3 2-3.5-1.5-11-.3-11 5 0 1.8 0 3 2 4.5V20h4v-2h2v2h4v-2c2-1.5 2-2.7 2-4.5 0-5.3-7.5-6.5-11-5" />
+                  <circle cx="12" cy="3" r="1.5" fill="currentColor" stroke="none" />
+                </svg>
+                DEPOSIT
+              </Link>
+              <Link 
+                to="/withdrawal"
+                style={{ 
+                  background: '#b80000', 
+                  color: '#fff', 
+                  border: '1px solid #fff', 
+                  borderRadius: '3px', 
+                  padding: '2px 6px', 
+                  fontSize: '10px', 
+                  fontWeight: 'bold', 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  gap: '3px', 
+                  cursor: 'pointer',
+                  textTransform: 'uppercase',
+                  textDecoration: 'none'
+                }}
+              >
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M18 5l-5 5-3-3-4 4" />
+                  <polyline points="13 5 18 5 18 10" />
+                  <path d="M2 18h16l2 2H4l-2-2z" />
+                </svg>
+                WITHDRAWAL
+              </Link>
             </div>
           </div>
         )}
