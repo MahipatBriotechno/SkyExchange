@@ -23,9 +23,17 @@ import FullMarketSoccerPage from './pages/FullMarketSoccerPage';
 import FullMarketTennisPage from './pages/FullMarketTennisPage';
 import FullMarketESoccerPage from './pages/FullMarketESoccerPage';
 import EventDetailedPage from './pages/EventDetailedPage';
+import CasinoPage from './pages/CasinoPage';
+import CasinoCategoryPage from './pages/CasinoCategoryPage';
+import Evolution from './pages/casino-pages/Evolution';
+import Supernowa from './pages/casino-pages/Supernowa';
+import BetGames from './pages/casino-pages/BetGames';
+import NumberMatka from './pages/casino-pages/NumberMatka';
+import SportsbookPage from './pages/SportsbookPage';
 import NotFoundPage from './pages/NotFoundPage';
 
 import './App.css';
+import Smartsoft from './pages/casino-pages/Smartsoft';
 
 function App() {
   return (
@@ -55,6 +63,14 @@ function App() {
         <Route path="/bets" element={<BetsHistoryPage />} />
         <Route path="/statement" element={<AccountStatementPage />} />
         <Route path="/activity-log" element={<ActivityLogPage />} />
+        <Route path="/casino" element={<CasinoPage />} />
+        <Route path="/evolution" element={<Evolution />} />
+        <Route path="/Smartsoft" element={<Smartsoft />} />
+        <Route path="/supernowa" element={<Supernowa />} />
+        <Route path="/betgames" element={<BetGames />} />
+        <Route path="/numbermatka" element={<NumberMatka />} />
+        <Route path="/:categorySlug" element={<CasinoCategoryPage />} />
+        <Route path="/sportsbook" element={<SportsbookPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </Router>

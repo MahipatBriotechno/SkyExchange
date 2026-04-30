@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
 import { userController } from '../controllers';
+import { useVirtualCricket } from './Layout';
 
 function MobileHeader() {
+  const { handleVirtualCricket } = useVirtualCricket() || {};
   const location = useLocation();
   const { isLoggedIn, username, loginToken, logout } = useAuthStore();
   const [balanceData, setBalanceData] = useState({ balance: '0', exposure: '0' });
@@ -90,7 +92,7 @@ function MobileHeader() {
 
       {/* Mobile Bottom Navigation */}
       <div className="mobile-bottom-nav">
-        <Link to="/login" className={`mobile-bottom-nav-item`}>
+        <Link to="/casino" className={`mobile-bottom-nav-item ${getActive('/casino')}`}>
           <img className="icon-promote" src="/images/promot.svg" alt="casino" width="24px" height="24px" />
           <span>Casino</span>
         </Link>

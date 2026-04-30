@@ -1,0 +1,14 @@
+at the the layout we have the left container whic is @contextScopeItemMention 
+here at the match odd u can show the all runners name table like - 
+
+curruntly its has the odds but then u have to show all the table type avalebe in this event like 
+
+Match Odds
+
+Match ODD-Book Maker
+
+TO WIN THE TOSS
+
+MINI BOOKMAKER
+
+like this and when user click on that table rgwb uawe x

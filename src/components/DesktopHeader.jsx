@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { authController, userController, marketController } from '../controllers';
+import { authController, userController, marketController, casinoController } from '../controllers';
 import { useAuthStore } from '../store/authStore';
+import { useVirtualCricket } from './Layout';
 
-function DesktopHeader({ onVirtualCricketClick }) {
+function DesktopHeader() {
+  const { handleVirtualCricket } = useVirtualCricket() || {};
   const [validationCode, setValidationCode] = useState('');
   const [loginName, setLoginName] = useState('');
   const [password, setPassword] = useState('');
@@ -366,9 +368,11 @@ function DesktopHeader({ onVirtualCricketClick }) {
               <li><Link to="/cricket" className={isActive('/cricket') ? 'active-menu' : ''}><span className="tag-live"><strong></strong>2</span>Cricket</Link></li>
               <li><Link to="/soccer"><span className="tag-live"><strong></strong>0</span>Soccer</Link></li>
               <li><Link to="/tennis"><span className="tag-live"><strong></strong>8</span>Tennis</Link></li>
-              <li><a href="#" onClick={(e) => { e.preventDefault(); onVirtualCricketClick && onVirtualCricketClick(); }}>Virtual Cricket</a></li>
+              <li><a href="#" onClick={(e) => { e.preventDefault(); handleVirtualCricket && handleVirtualCricket(); }}>Virtual Cricket</a></li>
               <li><Link to="/e-soccer" className={isActive('/e-soccer') ? 'active-menu' : ''}><span className="tag-live"><strong></strong>7</span>E-Soccer</Link></li>
               <li><Link to="/horse-racing" className={isActive('/horse-racing') ? 'active-menu' : ''}>Horse Racing</Link></li>
+              <li><Link to="/casino" className={isActive('/casino') ? 'active-menu' : ''}>Casino</Link></li>
+              <li><Link to="/sportsbook" className={isActive('/sportsbook') ? 'active-menu' : ''}>Sportsbook</Link></li>
             </ul>
             <ul className="setting-wrap">
               <li className="time_zone"><span>Time Zone :</span> GMT+5:30</li>

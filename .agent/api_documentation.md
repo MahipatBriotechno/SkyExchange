@@ -331,6 +331,26 @@ This document serves as the high-fidelity specification for the Betting Platform
 - **Request:** `{"LoginToken":"...", "sdate":"01-02-2026", "edate":"13-02-2026"}`
 - **Response:** `{"0": {"0": "Date", "1": 9345.38, "2": "O", "3": "Opening Balance"}, "1": {"0": "Date", "1": 36, "2": "DR", "3": "...", "4": "12456"}, ...}`
 
+### 56. User Profit & Loss ✅
+**POST** `/pl`
+- **Description:** Get game-wise Profit & Loss history.
+- **Request:** `{"LoginToken":"...", "sdate":"01-04-2026", "edate":"15-04-2026"}`
+- **Response:**
+  ```json
+  {
+    "0": {
+      "DateTime": "2026-04-01 00:00:36",
+      "GameName": "DreamCasino",
+      "amount": "-2200.24"
+    },
+    "1": {
+      "DateTime": "2026-04-01 19:12:49",
+      "GameName": "To Win The Toss(Lucknow Super Giants Vs Delhi Capitals)",
+      "amount": "3038.00"
+    }
+  }
+  ```
+
 ### 29. Account Statement Bet List ✅
 **POST** `/statementbet`
 - **Request:** `{" Eid ":"12456"}` (⚠️ Note space in property name ` Eid `)
@@ -426,6 +446,84 @@ This document serves as the high-fidelity specification for the Betting Platform
 **POST** `/offersdetail` (⚠️ Reuses Offer Detail URL)
 - **Request Body identical to Detail.**
 - **Success:** `{"error":"0", "msg":"Offers get Successfully."}`
+
+### 55. Whatsapp Link ✅
+**POST** `/wplink`
+- **Description:** Get the official dynamic WhatsApp redirect link.
+- **Request:** `{"LoginToken":"..."}`
+- **Response:**
+  ```json
+  {
+      "error": "0",
+      "Link": "https://go.wa.link/tigerexch247"
+  }
+  ```
+
+### 57. Home Page Banners ✅
+**POST** `/homebanners`
+- **Description:** Get list of images for the home page slider.
+- **Request:** `{"Type":"Web"}`
+- **Response:**
+  ```json
+  [
+      { "image": "https://.../16.webp" },
+      { "image": "https://.../17.webp" }
+  ]
+  ```
+
+---
+
+## 🪙 8. USDT APIs
+
+### 61. Deposit (USDT) ✅
+**POST** `/depositusdt`
+- **Request:**
+  ```json
+  {
+    "LoginToken": "string",
+    "Amount": "string",
+    "usdt_ref": "string",
+    "Mime_type": "image/png | image/jpg",
+    "Screenshot": "base64_encoded_string",
+    "txhash": "string"
+  }
+  ```
+- **Success:** `{"error": "0", "msg": "USDT Request Send Successfully."}`
+- **Error:** `{"error": "1", "msg": "Amount cannot be blank"}`
+
+### 62. USDT Wallet Update ✅
+**POST** `/usdtwalletupdate`
+- **Request:**
+  ```json
+  {
+    "LoginToken": "string",
+    "Waddress": "string",
+    "Mime_type": "image/png | image/jpg",
+    "Screenshot": "base64_encoded_string"
+  }
+  ```
+- **Success:** `{"error": "0", "msg": "USDT Wallet Save Successfully."}`
+- **Error:** `{"error": "1", "msg": "USDT Wallet Save Problems."}`
+
+### 63. USDT Wallet (Fetch) ✅
+**POST** `/usdtwallet`
+- **Request:** `{"LoginToken": "string"}`
+- **Success:** `{"error": "0", "Waddress": "string", "WQr": "image_url"}`
+- **Error:** `{"error": "1", "msg": "Wallet Record Not Found"}`
+
+### 64. Withdraw (USDT) ✅
+**POST** `/withdrawusdt`
+- **Request:**
+  ```json
+  {
+    "LoginToken": "string",
+    "Amount": "string",
+    "WalletAddress": "string",
+    "Remark": "string"
+  }
+  ```
+- **Success:** `{"error": "0", "msg": "Withdraw Request Send Successfully."}`
+- **Error:** `{"error": "1", "msg": "Withdraw Request Failed"}`
 
 ---
 
