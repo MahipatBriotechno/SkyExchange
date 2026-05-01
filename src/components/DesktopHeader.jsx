@@ -506,9 +506,13 @@ function DesktopHeader({ onVirtualCricketClick }) {
               <li><Link to="/e-football" className={isActive('/e-football') ? 'active-menu' : ''}><span className="tag-live"><strong></strong>{matchCounts['E-Football']}</span>E-Football</Link></li>
               <li><Link to="/horse-racing" className={isActive('/horse-racing') ? 'active-menu' : ''}>Horse Racing</Link></li>
             </ul>
-            <ul className="setting-wrap">
-              <li className="time_zone"><span>Time Zone :</span> GMT+5:30</li>
-              <li><a className="setting" style={{ cursor: 'pointer' }}>Setting <img src="/images/transparent.gif" alt="" /></a></li>
+            <ul className="setting-wrap" style={{ display: 'flex', alignItems: 'center', listStyle: 'none', margin: 0, padding: 0 }}>
+              <li className="time_zone" style={{ display: 'flex', alignItems: 'center', whiteSpace: 'nowrap' }}><span>Time Zone :</span> GMT+5:30</li>
+              <li style={{ display: 'flex', alignItems: 'center' }}>
+                <a className="setting" style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', whiteSpace: 'nowrap' }}>
+                  Setting <img src="/images/transparent.gif" alt="" style={{ marginLeft: '5px', display: 'inline-block' }} />
+                </a>
+              </li>
             </ul>
           </div>
         </div>

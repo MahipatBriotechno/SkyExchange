@@ -30,6 +30,7 @@ import NotFoundPage from './pages/NotFoundPage';
 import './App.css';
 
 import Snackbar from './components/Snackbar';
+import PopupModal from './components/PopupModal';
 
 function App() {
   return (
@@ -64,6 +65,7 @@ function App() {
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
       <Snackbar />
+      <PopupModal />
     </Router>
   );
 }
