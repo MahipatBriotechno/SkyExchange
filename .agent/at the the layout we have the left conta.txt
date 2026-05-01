@@ -12,3 +12,52 @@ TO WIN THE TOSS
 MINI BOOKMAKER
 
 like this and when user click on that table rgwb uawe x
+
+
+----
+
+
+Evo - "provider": "Evolution Gaming", ☑️
+snartsoft -  "provider": "Smartsoft Gaming",☑️
+royal Gaming - provider": "Royal Gaming Virtual",☑️
+Ezugi - "provider": "Ezugi",☑️
+live casinp - "Category": "Video Slots" 
+AVIATORX - "name": "AviatorX2",
+Mines -  "name": "Mines",
+kitex -  "name": "Kitex",
+Turbo Vortex - "name": "Turbo Vortex", 
+Spribe - "provider": "Spribe", ☑️
+Blackjack - "Category": "Live Blackjack"
+7 Up Down - "name": "Virtual 7 Up Down", 
+Andar Bahar VR - "name": "Andar Bahar VR", 
+Supernowa -  "provider": "SuperNowa", ☑️
+HORSEBOOK - "provider": "HORSEBOOK",☑️
+Minesweeper -  "name": "Casino Minesweeper",
+Teen Patti -  "name": "1 Day Teen Patti",
+Super Over VR -  "name": "Super Over VR", 
+TeenPatti 20-20 -  "name": "TeenPatti 20-20", 
+TeenPatti Joker  -  "name": "TeenPatti Joker", 
+7up7down - "name": "7 Up 7 Down", 
+Dragon & Tiger -  "name": "Dragon & Tiger", 
+Auto Roulette - "name": "VR Auto Roulette", 
+Dus Ka Dum -  "name": "VR Auto Roulette",
+Callbreak Quick - "name": "Callbreak Quick", 
+Sic Bo -  "name": "Thai Sic Bo", 
+Baccarat -  "name": "Baccarat Insurance", or "image": "venus_baccarat.webp", 
+Bonus Dice - "name": "Bonus Dice", 
+Heist - "name": "Heist", 
+5 Card Poker -  "name": "5 Card Poker", 
+Color Game -"name": "Color Game", 
+32 Cards - "name": "32 Cards", 
+Rummy - "name": "Rummy", 
+Number King - "name": "Number King",
+Dragon Tiger -  "name": "VR Dragon Tiger", 
+Worli Matka VR - "name": "Worli Matka VR", 
+BetGames - "provider": "BetGames.TV", ☑️
+Andar Bahar -  "name": "Super Andar Bahar", 
+Sicbo - "name": "Sic Bo", or   "name": "Extra Sicbo", 
+Coin Toss  - "name": "Coin Toss", 
+Card Matka  -  "name": "CardMatka", 
+Number Matka -   "name": "NumberMatka", 
+
+
