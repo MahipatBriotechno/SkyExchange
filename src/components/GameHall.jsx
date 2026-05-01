@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { marketController } from '../controllers';
 
 // All game banners from the original index.html gamehall-wrap-simple section
 const gameItems = [
@@ -363,6 +364,78 @@ const gameItems = [
 ];
 
 function GameHall() {
+  const [matchCounts, setMatchCounts] = useState({
+    Cricket: 0,
+    Football: 0,
+    Tennis: 0,
+    'E-Football': 0
+  });
+
+  useEffect(() => {
+    const fetchMatchCounts = async () => {
+      try {
+        const sports = ['Cricket', 'Football', 'Tennis', 'E-Football'];
+        const res = await marketController.getGameList(sports.join(','));
+        
+        let matchData = [];
+        if (res && res.matches) {
+          matchData = res.matches;
+        } else if (res && typeof res === 'object') {
+          matchData = Object.values(res).filter(v => typeof v === 'object' && v !== null && (v.MarketId || v.marketid || v.Gid || v.gid));
+        } else if (Array.isArray(res)) {
+          matchData = res;
+        }
+
+        const counts = { Cricket: 0, Football: 0, Tennis: 0, 'E-Football': 0 };
+        const now = new Date();
+
+        const parseDate = (str) => {
+          if (!str) return null;
+          const dateVal = str.includes('T') ? str : str.replace(' ', 'T');
+          let d = new Date(dateVal);
+          if (isNaN(d.getTime())) {
+            const parts = str.split(/[-/ :]/);
+            if (parts.length >= 3) {
+              const day = parseInt(parts[0], 10);
+              const month = parseInt(parts[1], 10) - 1;
+              const year = parseInt(parts[2], 10);
+              if (day <= 31 && month <= 11) {
+                const hour = parseInt(parts[3] || '0', 10);
+                const minute = parseInt(parts[4] || '0', 10);
+                const second = parseInt(parts[5] || '0', 10);
+                d = new Date(year, month, day, hour, minute, second);
+              }
+            }
+          }
+          return d && !isNaN(d.getTime()) ? d : null;
+        };
+
+        matchData.forEach(m => {
+          const sport = m.sportname || m.Type || m.sport || 'Other';
+          const startTimeStr = m.DateTime || m.dateTime || m.Datetime || m.staredtime || m.StartTime || '';
+          const startTime = parseDate(startTimeStr);
+          const isWinnerMarket = (m.Game_Type || m.GameType || '').toLowerCase() === 'winner' || 
+                               (m.Team2 || '').includes('TOURNAMENT_WINNER');
+          
+          if ((startTime && startTime <= now) || isWinnerMarket) {
+            if (sport === 'Cricket') counts.Cricket++;
+            else if (sport === 'Football' || sport === 'Soccer') counts.Football++;
+            else if (sport === 'Tennis') counts.Tennis++;
+            else if (sport === 'E-Football' || sport === 'E-Soccer' || sport === 'ESoccer') counts['E-Football']++;
+          }
+        });
+
+        setMatchCounts(counts);
+      } catch (err) {
+        console.error('Failed to fetch GameHall match counts:', err);
+      }
+    };
+
+    fetchMatchCounts();
+    const interval = setInterval(fetchMatchCounts, 60000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className="gamehall-wrap-simple">
       {/* Sports Live Board */}
@@ -373,19 +446,19 @@ function GameHall() {
           </dt>
           <dd id="onLiveCount_CRICKET">
             <p>Cricket</p>
-            <span id="count"></span>
+            <span id="count">{matchCounts.Cricket}</span>
           </dd>
           <dd id="onLiveCount_SOCCER">
-            <p>Soccer</p>
-            <span id="count"></span>
+            <p>Football</p>
+            <span id="count">{matchCounts.Football}</span>
           </dd>
           <dd id="onLiveCount_TENNIS">
             <p>Tennis</p>
-            <span id="count"></span>
+            <span id="count">{matchCounts.Tennis}</span>
           </dd>
           <dd id="onLiveCount_E_SOCCER">
-            <p>E-Soccer</p>
-            <span id="count"></span>
+            <p>E-Football</p>
+            <span id="count">{matchCounts['E-Football']}</span>
           </dd>
         </dl>
         <dl className="entrance-title">

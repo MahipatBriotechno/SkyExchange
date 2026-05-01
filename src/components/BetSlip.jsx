@@ -22,13 +22,17 @@ const BetSlip = () => {
       if (res && typeof res === 'object' && !res.error) {
         const betArray = Object.values(res).filter(item => typeof item === 'object' && item !== null);
         
-        // Filter bets for the current match if possible
-        const eventBets = betArray.filter(b => {
-            const gid = b.gid || b.Gid || b.eventId || b.matchId || b.MatchId;
-            return !gid || gid.toString() === matchId?.toString();
-        });
-        
-        setBets(eventBets);
+        if (matchId) {
+          // Filter bets for the current match if matchId is present in URL
+          const eventBets = betArray.filter(b => {
+            const gid = b.gid || b.Gid || b.eventId || b.matchId || b.MatchId || b.Eid || b.eid;
+            return gid && gid.toString() === matchId.toString();
+          });
+          setBets(eventBets);
+        } else {
+          // Show all bets on pages without a specific match context (e.g. In-Play)
+          setBets(betArray);
+        }
       }
     } catch (err) {
       console.error('Failed to fetch bets:', err);

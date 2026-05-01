@@ -230,8 +230,7 @@ const FullMarketCricketPage = () => {
 
         {/* Right Sidebar - BetSlip */}
         <aside className="betslip-sidebar">
-          <div className="betslip-header">Bet Slip</div>
-          <BetSlip selectedBet={selectedBet} setSelectedBet={setSelectedBet} />
+          <BetSlip />
         </aside>
       </div>
     </Layout>

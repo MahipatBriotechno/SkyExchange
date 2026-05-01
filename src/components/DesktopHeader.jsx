@@ -17,6 +17,12 @@ function DesktopHeader({ onVirtualCricketClick }) {
   const [showSearchResults, setShowSearchResults] = useState(false);
   const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false);
   const [isBalanceModalOpen, setIsBalanceModalOpen] = useState(false);
+  const [matchCounts, setMatchCounts] = useState({
+    Cricket: 0,
+    Football: 0,
+    Tennis: 0,
+    'E-Football': 0
+  });
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -140,6 +146,78 @@ function DesktopHeader({ onVirtualCricketClick }) {
       setLoading(false);
     }
   };
+
+  const fetchMatchCounts = async () => {
+    try {
+      // Fetching live counts for all major sports
+      const sports = ['Cricket', 'Football', 'Tennis', 'E-Football'];
+      const res = await marketController.getGameList(sports.join(','));
+      
+      let matchData = [];
+      if (res && res.matches) {
+        matchData = res.matches;
+      } else if (res && typeof res === 'object') {
+        matchData = Object.values(res).filter(v => typeof v === 'object' && v !== null && (v.MarketId || v.marketid || v.Gid || v.gid));
+      } else if (Array.isArray(res)) {
+        matchData = res;
+      }
+
+      const counts = {
+        Cricket: 0,
+        Football: 0,
+        Tennis: 0,
+        'E-Football': 0
+      };
+
+      const now = new Date();
+      matchData.forEach(m => {
+        const sport = m.sportname || m.Type || m.sport || 'Other';
+        const startTimeStr = m.DateTime || m.dateTime || m.Datetime || m.staredtime || m.StartTime || '';
+        const startTime = parseDate(startTimeStr);
+        const isWinnerMarket = (m.Game_Type || m.GameType || '').toLowerCase() === 'winner' || 
+                             (m.Team2 || '').includes('TOURNAMENT_WINNER');
+        
+        // Count as "Live" if it has started or is a winner market
+        if ((startTime && startTime <= now) || isWinnerMarket) {
+          if (sport === 'Cricket') counts.Cricket++;
+          else if (sport === 'Football' || sport === 'Soccer') counts.Football++;
+          else if (sport === 'Tennis') counts.Tennis++;
+          else if (sport === 'E-Football' || sport === 'E-Soccer' || sport === 'ESoccer') counts['E-Football']++;
+        }
+      });
+
+      setMatchCounts(counts);
+    } catch (err) {
+      console.error('Failed to fetch match counts:', err);
+    }
+  };
+
+  const parseDate = (str) => {
+    if (!str) return null;
+    const dateVal = str.includes('T') ? str : str.replace(' ', 'T');
+    let d = new Date(dateVal);
+    if (isNaN(d.getTime())) {
+      const parts = str.split(/[-/ :]/);
+      if (parts.length >= 3) {
+        const day = parseInt(parts[0], 10);
+        const month = parseInt(parts[1], 10) - 1;
+        const year = parseInt(parts[2], 10);
+        if (day <= 31 && month <= 11) {
+          const hour = parseInt(parts[3] || '0', 10);
+          const minute = parseInt(parts[4] || '0', 10);
+          const second = parseInt(parts[5] || '0', 10);
+          d = new Date(year, month, day, hour, minute, second);
+        }
+      }
+    }
+    return d && !isNaN(d.getTime()) ? d : null;
+  };
+
+  useEffect(() => {
+    fetchMatchCounts();
+    const timer = setInterval(fetchMatchCounts, 60000); // Refresh every minute
+    return () => clearInterval(timer);
+  }, []);
 
   const isActive = (path) => {
     const current = location.pathname;
@@ -421,11 +499,11 @@ function DesktopHeader({ onVirtualCricketClick }) {
               <li><Link to="/" className={isActive('/') ? 'active-menu' : ''}>Home</Link></li>
               <li><Link to="/in-play">In-Play</Link></li>
               <li><Link to="/multi-markets">Multi Markets</Link></li>
-              <li><Link to="/cricket" className={isActive('/cricket') ? 'active-menu' : ''}><span className="tag-live"><strong></strong>2</span>Cricket</Link></li>
-              <li><Link to="/soccer"><span className="tag-live"><strong></strong>0</span>Soccer</Link></li>
-              <li><Link to="/tennis"><span className="tag-live"><strong></strong>8</span>Tennis</Link></li>
+              <li><Link to="/cricket" className={isActive('/cricket') ? 'active-menu' : ''}><span className="tag-live"><strong></strong>{matchCounts.Cricket}</span>Cricket</Link></li>
+              <li><Link to="/football" className={isActive('/football') ? 'active-menu' : ''}><span className="tag-live"><strong></strong>{matchCounts.Football}</span>Football</Link></li>
+              <li><Link to="/tennis" className={isActive('/tennis') ? 'active-menu' : ''}><span className="tag-live"><strong></strong>{matchCounts.Tennis}</span>Tennis</Link></li>
               <li><a href="#" onClick={(e) => { e.preventDefault(); onVirtualCricketClick && onVirtualCricketClick(); }}>Virtual Cricket</a></li>
-              <li><Link to="/e-soccer" className={isActive('/e-soccer') ? 'active-menu' : ''}><span className="tag-live"><strong></strong>7</span>E-Soccer</Link></li>
+              <li><Link to="/e-football" className={isActive('/e-football') ? 'active-menu' : ''}><span className="tag-live"><strong></strong>{matchCounts['E-Football']}</span>E-Football</Link></li>
               <li><Link to="/horse-racing" className={isActive('/horse-racing') ? 'active-menu' : ''}>Horse Racing</Link></li>
             </ul>
             <ul className="setting-wrap">

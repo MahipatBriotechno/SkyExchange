@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Layout from '../components/Layout';
+import BetSlip from '../components/BetSlip';
 import { marketController } from '../controllers';
 
 const extractOdd = (runner) => {
@@ -133,7 +134,7 @@ function InPlayPage() {
     const fetchMatches = async () => {
       try {
         setLoading(true);
-        const res = await marketController.getGameList('Cricket,Soccer,Tennis');
+        const res = await marketController.getGameList('Cricket,Football,Tennis,E-Football');
         let matchData = [];
         if (res && res.matches) { // Some APIs return { matches: [] }
           matchData = res.matches;
@@ -416,13 +417,7 @@ function InPlayPage() {
         </section>
 
         <aside className="right-area">
-          <div className="betslip-head">
-            <div>Bet Slip</div>
-            <div className="minimize">−</div>
-          </div>
-          <div className="betslip-body">
-            Click on the odds to add selections to the betslip.
-          </div>
+          <BetSlip />
         </aside>
       </main>
     </Layout>
