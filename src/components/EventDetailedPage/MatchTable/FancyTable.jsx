@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { getRunnerRates, getMarketStatus } from '../../../utils/rateRefiner';
+import InlineBetBox from './InlineBetBox';
 
 /**
  * FancyTable Component
@@ -20,7 +21,7 @@ const DEMO_MARKETS = [
   { id: 3, name: '6 Over Run UAE', no: 42, noRate: 100, yes: 44, yesRate: 100, min: '1.00', max: '300.00' },
 ];
 
-const FancyTable = ({ fancyData, onBetClick, liveRates = {} }) => {
+const FancyTable = ({ fancyData, onBetClick, liveRates = {}, selectedBet, onCancelBet }) => {
   const [activeTab, setActiveTab] = useState('All');
 
   const allMarkets = fancyData && fancyData.length > 0
@@ -258,7 +259,7 @@ const FancyTable = ({ fancyData, onBetClick, liveRates = {} }) => {
                 <div style={{ display: 'flex', position: 'relative' }}>
                   {/* no (Lay / pink) cell */}
                   <div
-                    onClick={() => !isSuspended && onBetClick && onBetClick({ name: market.name, side: 'no', price: rates?.lay?.p1 })}
+                    onClick={() => !isSuspended && onBetClick && onBetClick({ name: market.name, side: 'lay', price: rates?.lay?.p1, runnerIndex: 0, marketData: { ...market, noVal: parseFloat(rates?.lay?.v1 || '100'), yesVal: parseFloat(rates?.back?.v1 || '100') } })}
                     style={{
                       width: '114.688px',
                       background: '#faa9ba',
@@ -281,7 +282,7 @@ const FancyTable = ({ fancyData, onBetClick, liveRates = {} }) => {
 
                   {/* yes (Back / blue) cell */}
                   <div
-                    onClick={() => !isSuspended && onBetClick && onBetClick({ name: market.name, side: 'yes', price: rates?.back?.p1 })}
+                    onClick={() => !isSuspended && onBetClick && onBetClick({ name: market.name, side: 'back', price: rates?.back?.p1, runnerIndex: 0, marketData: { ...market, noVal: parseFloat(rates?.lay?.v1 || '100'), yesVal: parseFloat(rates?.back?.v1 || '100') } })}
                     style={{
                       width: '114.688px',
                       background: '#72bbef',
@@ -345,6 +346,17 @@ const FancyTable = ({ fancyData, onBetClick, liveRates = {} }) => {
                       </span>
                     </div>
                   </div>
+                </div>
+              )}
+
+              {/* Render Inline Bet Box if this fancy market is selected */}
+              {selectedBet?.runner === market.name && selectedBet?.market === 'Fancy Bet' && (
+                <div style={{ padding: 0 }}>
+                  <InlineBetBox 
+                    selection={selectedBet}
+                    matchId={marketId}
+                    onCancel={onCancelBet}
+                  />
                 </div>
               )}
             </React.Fragment>

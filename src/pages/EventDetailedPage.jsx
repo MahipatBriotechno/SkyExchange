@@ -125,12 +125,14 @@ const EventDetailedPage = () => {
     }
   }, [matchId, isLoggedIn, loginToken]);
 
-  const handleBetClick = (runner, type, price, market = 'Match Odds') => {
+  const handleBetClick = (runner, type, price, market = 'Match Odds', runnerIndex, marketData) => {
     setSelectedBet({
       runner,
       type,
       price,
-      market
+      market,
+      runnerIndex,
+      marketData
     });
   };
 
@@ -158,7 +160,7 @@ const EventDetailedPage = () => {
           <div className="h-full flex flex-col">
 
             <div className="p-1 flex-1 overflow-y-auto">
-              <BetSlip selectedBet={selectedBet} setSelectedBet={setSelectedBet} />
+              <BetSlip />
             </div>
           </div>
         }
@@ -215,7 +217,9 @@ const EventDetailedPage = () => {
                           key={market.eid || mIdx}
                           marketData={market}
                           liveRates={liveRates}
-                          onBetClick={(runner, side, price) => handleBetClick(runner, side, price, market.name)}
+                          selectedBet={selectedBet}
+                          onCancelBet={() => setSelectedBet(null)}
+                          onBetClick={(runner, side, price, runnerIndex) => handleBetClick(runner, side, price, market.name, runnerIndex, market)}
                         />
                       );
                     }
@@ -227,7 +231,9 @@ const EventDetailedPage = () => {
                           key={market.eid || mIdx}
                           bookmakerData={market}
                           liveRates={liveRates}
-                          onBetClick={(runner, side, price) => handleBetClick(runner, side, price, market.name)}
+                          selectedBet={selectedBet}
+                          onCancelBet={() => setSelectedBet(null)}
+                          onBetClick={(runner, side, price, runnerIndex) => handleBetClick(runner, side, price, market.name, runnerIndex, market)}
                         />
                       );
                     }
@@ -239,7 +245,9 @@ const EventDetailedPage = () => {
                         marketName={market.name}
                         marketData={market}
                         liveRates={liveRates}
-                        onBetClick={(runner, side, price) => handleBetClick(runner, side, price, market.name)}
+                        selectedBet={selectedBet}
+                        onCancelBet={() => setSelectedBet(null)}
+                        onBetClick={(runner, side, price, runnerIndex) => handleBetClick(runner, side, price, market.name, runnerIndex, market)}
                       />
                     );
                   })}
@@ -249,7 +257,9 @@ const EventDetailedPage = () => {
                     <FancyTable 
                       fancyData={fancyMarkets}
                       liveRates={liveRates}
-                      onBetClick={(bet) => handleBetClick(bet.name, bet.side, bet.price, 'Fancy Bet')}
+                      selectedBet={selectedBet}
+                      onCancelBet={() => setSelectedBet(null)}
+                      onBetClick={(bet) => handleBetClick(bet.name, bet.side, bet.price, 'Fancy Bet', bet.runnerIndex, bet.marketData)}
                     />
                   )}
                 </>

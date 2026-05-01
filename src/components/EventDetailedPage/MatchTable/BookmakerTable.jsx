@@ -1,12 +1,13 @@
 import React from 'react';
 import { getRunnerRates, getMarketStatus } from '../../../utils/rateRefiner';
+import InlineBetBox from './InlineBetBox';
 
 /**
  * BookmakerTable Component
  * 
  * Renders the Bookmaker market table (0% Commission markets).
  */
-const BookmakerTable = ({ bookmakerData, onBetClick, liveRates = {} }) => {
+const BookmakerTable = ({ bookmakerData, onBetClick, liveRates = {}, selectedBet, onCancelBet }) => {
   // Extract runners from bookmakerData
   const runnersList = bookmakerData?.runners ? Object.values(bookmakerData.runners) : [];
   const runners = runnersList.length > 0 ? runnersList : [];
@@ -112,7 +113,7 @@ const BookmakerTable = ({ bookmakerData, onBetClick, liveRates = {} }) => {
                     <div
                       className="flex flex-col items-center justify-center bg-[#e4eff6] cursor-pointer hover:opacity-80 transition-opacity border-r border-white/50"
                       style={{ fontFamily: 'Tahoma, Helvetica, sans-serif', fontSize: '12px', lineHeight: '15px', fontWeight: 400, letterSpacing: 'normal', color: '#1E1E1E', width: '114.688px', height: '42px', boxSizing: 'border-box' }}
-                      onClick={() => !isSuspended && onBetClick(runner.RunnerName, 'back', rates?.back?.p3)}
+                      onClick={() => !isSuspended && onBetClick(runner.RunnerName, 'back', rates?.back?.p3, idx)}
                     >
                       <span className="font-bold">{rates?.back?.p3 || '-'}</span>
                       <span className="text-[10px] text-gray-500">{rates?.back?.v3 || '-'}</span>
@@ -122,7 +123,7 @@ const BookmakerTable = ({ bookmakerData, onBetClick, liveRates = {} }) => {
                     <div
                       className="flex flex-col items-center justify-center bg-[#cfe3f1] cursor-pointer hover:opacity-80 transition-opacity border-r border-white/50"
                       style={{ fontFamily: 'Tahoma, Helvetica, sans-serif', fontSize: '12px', lineHeight: '15px', fontWeight: 400, letterSpacing: 'normal', color: '#1E1E1E', width: '114.688px', height: '42px', boxSizing: 'border-box' }}
-                      onClick={() => !isSuspended && onBetClick(runner.RunnerName, 'back', rates?.back?.p2)}
+                      onClick={() => !isSuspended && onBetClick(runner.RunnerName, 'back', rates?.back?.p2, idx)}
                     >
                       <span className="font-bold">{rates?.back?.p2 || '-'}</span>
                       <span className="text-[10px] text-gray-500">{rates?.back?.v2 || '-'}</span>
@@ -132,7 +133,7 @@ const BookmakerTable = ({ bookmakerData, onBetClick, liveRates = {} }) => {
                     <div
                       className="flex flex-col items-center justify-center bg-[#72bbef] border border-white cursor-pointer hover:opacity-80 transition-opacity"
                       style={{ fontFamily: 'Tahoma, Helvetica, sans-serif', fontSize: '12px', lineHeight: '15px', fontWeight: 400, letterSpacing: 'normal', color: '#1E1E1E', width: '114.688px', height: '42px', boxSizing: 'border-box' }}
-                      onClick={() => !isSuspended && onBetClick(runner.RunnerName, 'back', rates?.back?.p1)}
+                      onClick={() => !isSuspended && onBetClick(runner.RunnerName, 'back', rates?.back?.p1, idx)}
                     >
                       <span className="font-bold">{rates?.back?.p1 || '-'}</span>
                       <span className="text-[10px]">{rates?.back?.v1 || '-'}</span>
@@ -142,7 +143,7 @@ const BookmakerTable = ({ bookmakerData, onBetClick, liveRates = {} }) => {
                     <div
                       className="flex flex-col items-center justify-center bg-[#faa9ba] border border-white cursor-pointer hover:opacity-80 transition-opacity"
                       style={{ fontFamily: 'Tahoma, Helvetica, sans-serif', fontSize: '12px', lineHeight: '15px', fontWeight: 400, letterSpacing: 'normal', color: '#1E1E1E', width: '114.688px', height: '42px', boxSizing: 'border-box' }}
-                      onClick={() => !isSuspended && onBetClick(runner.RunnerName, 'lay', rates?.lay?.p1)}
+                      onClick={() => !isSuspended && onBetClick(runner.RunnerName, 'lay', rates?.lay?.p1, idx)}
                     >
                       <span className="font-bold">{rates?.lay?.p1 || '-'}</span>
                       <span className="text-[10px]">{rates?.lay?.v1 || '-'}</span>
@@ -152,7 +153,7 @@ const BookmakerTable = ({ bookmakerData, onBetClick, liveRates = {} }) => {
                     <div
                       className="flex flex-col items-center justify-center bg-[#f2cfd5] cursor-pointer hover:opacity-80 transition-opacity border-l border-white/50"
                       style={{ fontFamily: 'Tahoma, Helvetica, sans-serif', fontSize: '12px', lineHeight: '15px', fontWeight: 400, letterSpacing: 'normal', color: '#1E1E1E', width: '114.688px', height: '42px', boxSizing: 'border-box' }}
-                      onClick={() => !isSuspended && onBetClick(runner.RunnerName, 'lay', rates?.lay?.p2)}
+                      onClick={() => !isSuspended && onBetClick(runner.RunnerName, 'lay', rates?.lay?.p2, idx)}
                     >
                       <span className="font-bold">{rates?.lay?.p2 || '-'}</span>
                       <span className="text-[10px] text-gray-500">{rates?.lay?.v2 || '-'}</span>
@@ -162,7 +163,7 @@ const BookmakerTable = ({ bookmakerData, onBetClick, liveRates = {} }) => {
                     <div
                       className="flex flex-col items-center justify-center bg-[#f6e3e7] cursor-pointer hover:opacity-80 transition-opacity border-l border-white/50"
                       style={{ fontFamily: 'Tahoma, Helvetica, sans-serif', fontSize: '12px', lineHeight: '15px', fontWeight: 400, letterSpacing: 'normal', color: '#1E1E1E', width: '114.688px', height: '42px', boxSizing: 'border-box' }}
-                      onClick={() => !isSuspended && onBetClick(runner.RunnerName, 'lay', rates?.lay?.p3)}
+                      onClick={() => !isSuspended && onBetClick(runner.RunnerName, 'lay', rates?.lay?.p3, idx)}
                     >
                       <span className="font-bold">{rates?.lay?.p3 || '-'}</span>
                       <span className="text-[10px] text-gray-500">{rates?.lay?.v3 || '-'}</span>
@@ -176,6 +177,17 @@ const BookmakerTable = ({ bookmakerData, onBetClick, liveRates = {} }) => {
                     )}
                   </div>
                 </div>
+
+                {/* Render Inline Bet Box if this runner is selected */}
+                {selectedBet?.runner === runner.RunnerName && (selectedBet?.market === bookmakerData?.name || selectedBet?.market === 'Match Odds' || selectedBet?.market === 'Bookmaker Market') && (
+                  <div className="w-full">
+                    <InlineBetBox 
+                      selection={selectedBet}
+                      matchId={marketId}
+                      onCancel={onCancelBet}
+                    />
+                  </div>
+                )}
 
                 {/* Runner Message Row */}
                 {runner.Msg && runner.Msg !== '' && (
