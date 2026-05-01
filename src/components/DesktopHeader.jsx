@@ -21,7 +21,8 @@ function DesktopHeader({ onVirtualCricketClick }) {
     Cricket: 0,
     Football: 0,
     Tennis: 0,
-    'E-Football': 0
+    'Horse Racing': 0,
+    'Greyhound Racing': 0
   });
 
   const location = useLocation();
@@ -150,7 +151,7 @@ function DesktopHeader({ onVirtualCricketClick }) {
   const fetchMatchCounts = async () => {
     try {
       // Fetching live counts for all major sports
-      const sports = ['Cricket', 'Football', 'Tennis', 'E-Football'];
+      const sports = ['Cricket', 'Football', 'Tennis', 'Horse Racing', 'Greyhound Racing'];
       const res = await marketController.getGameList(sports.join(','));
       
       let matchData = [];
@@ -166,7 +167,8 @@ function DesktopHeader({ onVirtualCricketClick }) {
         Cricket: 0,
         Football: 0,
         Tennis: 0,
-        'E-Football': 0
+        'Horse Racing': 0,
+        'Greyhound Racing': 0
       };
 
       const now = new Date();
@@ -182,7 +184,8 @@ function DesktopHeader({ onVirtualCricketClick }) {
           if (sport === 'Cricket') counts.Cricket++;
           else if (sport === 'Football' || sport === 'Soccer') counts.Football++;
           else if (sport === 'Tennis') counts.Tennis++;
-          else if (sport === 'E-Football' || sport === 'E-Soccer' || sport === 'ESoccer') counts['E-Football']++;
+          else if (sport === 'Horse Racing') counts['Horse Racing']++;
+          else if (sport === 'Greyhound Racing') counts['Greyhound Racing']++;
         }
       });
 
@@ -502,9 +505,9 @@ function DesktopHeader({ onVirtualCricketClick }) {
               <li><Link to="/cricket" className={isActive('/cricket') ? 'active-menu' : ''}><span className="tag-live"><strong></strong>{matchCounts.Cricket}</span>Cricket</Link></li>
               <li><Link to="/football" className={isActive('/football') ? 'active-menu' : ''}><span className="tag-live"><strong></strong>{matchCounts.Football}</span>Football</Link></li>
               <li><Link to="/tennis" className={isActive('/tennis') ? 'active-menu' : ''}><span className="tag-live"><strong></strong>{matchCounts.Tennis}</span>Tennis</Link></li>
+              <li><Link to="/horse-racing" className={isActive('/horse-racing') ? 'active-menu' : ''}><span className="tag-live"><strong></strong>{matchCounts['Horse Racing']}</span>Horse Racing</Link></li>
+              <li><Link to="/greyhound-racing" className={isActive('/greyhound-racing') ? 'active-menu' : ''}><span className="tag-live"><strong></strong>{matchCounts['Greyhound Racing']}</span>Greyhound Racing</Link></li>
               <li><a href="#" onClick={(e) => { e.preventDefault(); onVirtualCricketClick && onVirtualCricketClick(); }}>Virtual Cricket</a></li>
-              <li><Link to="/e-football" className={isActive('/e-football') ? 'active-menu' : ''}><span className="tag-live"><strong></strong>{matchCounts['E-Football']}</span>E-Football</Link></li>
-              <li><Link to="/horse-racing" className={isActive('/horse-racing') ? 'active-menu' : ''}>Horse Racing</Link></li>
             </ul>
             <ul className="setting-wrap" style={{ display: 'flex', alignItems: 'center', listStyle: 'none', margin: 0, padding: 0 }}>
               <li className="time_zone" style={{ display: 'flex', alignItems: 'center', whiteSpace: 'nowrap' }}><span>Time Zone :</span> GMT+5:30</li>

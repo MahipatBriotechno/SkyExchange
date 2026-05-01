@@ -7,7 +7,6 @@ import MultiMarketsPage from './pages/MultiMarketsPage';
 import CricketPage from './pages/CricketPage';
 import FootballPage from './pages/FootballPage';
 import TennisPage from './pages/TennisPage';
-import EFootballPage from './pages/EFootballPage';
 import SportsPage from './pages/SportsPage';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
@@ -17,11 +16,11 @@ import BetsHistoryPage from './pages/Account/BetsHistoryPage';
 import AccountStatementPage from './pages/Account/AccountStatementPage';
 import ActivityLogPage from './pages/Account/ActivityLogPage';
 import HorseRacingPage from './pages/HorseRacingPage';
+import GreyhoundRacingPage from './pages/GreyhoundRacingPage';
 import FullMarketHorseRacingPage from './pages/FullMarketHorseRacingPage';
 import FullMarketCricketPage from './pages/FullMarketCricketPage';
 import FullMarketFootballPage from './pages/FullMarketFootballPage';
 import FullMarketTennisPage from './pages/FullMarketTennisPage';
-import FullMarketEFootballPage from './pages/FullMarketEFootballPage';
 import EventDetailedPage from './pages/EventDetailedPage';
 import DepositPage from './pages/DepositPage';
 import WithdrawPage from './pages/WithdrawPage';
@@ -43,13 +42,12 @@ function App() {
         <Route path="/cricket" element={<CricketPage />} />
         <Route path="/football" element={<FootballPage />} />
         <Route path="/tennis" element={<TennisPage />} />
-        <Route path="/e-football" element={<EFootballPage />} />
         <Route path="/horse-racing" element={<HorseRacingPage />} />
-        <Route path="/full-market-horse-racing" element={<FullMarketHorseRacingPage />} />
+        <Route path="/greyhound-racing" element={<GreyhoundRacingPage />} />
         <Route path="/full-market-cricket" element={<FullMarketCricketPage />} />
         <Route path="/full-market-football" element={<FullMarketFootballPage />} />
         <Route path="/full-market-tennis" element={<FullMarketTennisPage />} />
-        <Route path="/full-market-e-football" element={<FullMarketEFootballPage />} />
+        <Route path="/full-market-horse-racing" element={<FullMarketHorseRacingPage />} />
         <Route path="/event-detail/:matchId" element={<EventDetailedPage />} />
         <Route path="/:sport/:matchId" element={<EventDetailedPage />} />
         <Route path="/sports" element={<SportsPage />} />

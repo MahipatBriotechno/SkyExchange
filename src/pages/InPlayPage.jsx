@@ -134,7 +134,7 @@ function InPlayPage() {
     const fetchMatches = async () => {
       try {
         setLoading(true);
-        const res = await marketController.getGameList('Cricket,Football,Tennis,E-Football');
+        const res = await marketController.getGameList('Cricket,Football,Tennis,Horse Racing,Greyhound Racing');
         let matchData = [];
         if (res && res.matches) { // Some APIs return { matches: [] }
           matchData = res.matches;

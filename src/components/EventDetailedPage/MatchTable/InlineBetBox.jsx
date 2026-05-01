@@ -4,7 +4,7 @@ import { bettingController } from '../../../controllers';
 import { userController } from '../../../controllers/user/userController';
 import { useSnackbarStore } from '../../../store/snackbarStore';
 
-const InlineBetBox = ({ selection, matchId, onCancel, onSuccess }) => {
+const InlineBetBox = ({ selection, matchId, onCancel, onSuccess, sport }) => {
   const { loginToken } = useAuthStore();
   const showSnackbar = useSnackbarStore(state => state.show);
   const [stake, setStake] = useState('');
@@ -59,6 +59,7 @@ const InlineBetBox = ({ selection, matchId, onCancel, onSuccess }) => {
     try {
       const market = selection.marketData;
       const mType = market?.Type?.toUpperCase() || 'ODDS';
+      const isRacing = sport?.toLowerCase() === 'horse racing' || sport?.toLowerCase() === 'greyhound racing';
 
       const common = {
         LoginToken: loginToken,
@@ -79,65 +80,74 @@ const InlineBetBox = ({ selection, matchId, onCancel, onSuccess }) => {
 
       let res;
 
-      switch (mType) {
-        case 'BOOKMAKER':
-          res = await bettingController.placeBookmakerBet({
-            ...common,
-            Team: teamLetter,
-            Type: betTypeChar
-          });
-          break;
-
-        case 'FANCY':
-          res = await bettingController.placeFancyBet({
-            ...common,
-            No: market?.noVal || 100, // typically need to pass actual min/max if required, but betting-pwa used 100
-            Yes: market?.yesVal || 100,
-            Type: betTypeChar
-          });
-          break;
-
-        case 'LINE':
-          res = await bettingController.placeLineBet({
-            ...common,
-            Type: betTypeChar
-          });
-          break;
-
-        case 'EXTRA':
-          res = await bettingController.placeExtraBet({
-            ...common,
-            Team: teamLetter,
-            Type: betTypeChar
-          });
-          break;
-
-        case 'GOAL':
-        case 'GOALS':
-        case 'WINNETSET':
-          res = await bettingController.placeWinnerBet({ // Assuming winner or goal bet type
-            ...common,
-            Team: teamLetter,
-            Type: betTypeChar
-          });
-          break;
-
-        default: // ODDS
-          const runnersCount = Object.keys(market?.runners || {}).length;
-          if (runnersCount === 3) {
-            res = await bettingController.place3TeamOddBet({
+      if (isRacing) {
+        // Implementation for /dealwinner for Racing as requested
+        res = await bettingController.placeWinnerBet({
+          ...common,
+          SelectionId: selection.selectionId || selection.runnerIndex || '',
+          Type: betTypeChar
+        });
+      } else {
+        switch (mType) {
+          case 'BOOKMAKER':
+            res = await bettingController.placeBookmakerBet({
               ...common,
               Team: teamLetter,
               Type: betTypeChar
             });
-          } else {
-            res = await bettingController.place2TeamOddBet({
+            break;
+
+          case 'FANCY':
+            res = await bettingController.placeFancyBet({
+              ...common,
+              No: market?.noVal || 100, // typically need to pass actual min/max if required, but betting-pwa used 100
+              Yes: market?.yesVal || 100,
+              Type: betTypeChar
+            });
+            break;
+
+          case 'LINE':
+            res = await bettingController.placeLineBet({
+              ...common,
+              Type: betTypeChar
+            });
+            break;
+
+          case 'EXTRA':
+            res = await bettingController.placeExtraBet({
               ...common,
               Team: teamLetter,
               Type: betTypeChar
             });
-          }
-          break;
+            break;
+
+          case 'GOAL':
+          case 'GOALS':
+          case 'WINNETSET':
+            res = await bettingController.placeWinnerBet({ // Assuming winner or goal bet type
+              ...common,
+              SelectionId: selection.selectionId || selection.runnerIndex || '',
+              Type: betTypeChar
+            });
+            break;
+
+          default: // ODDS
+            const runnersCount = Object.keys(market?.runners || {}).length;
+            if (runnersCount === 3) {
+              res = await bettingController.place3TeamOddBet({
+                ...common,
+                Team: teamLetter,
+                Type: betTypeChar
+              });
+            } else {
+              res = await bettingController.place2TeamOddBet({
+                ...common,
+                Team: teamLetter,
+                Type: betTypeChar
+              });
+            }
+            break;
+        }
       }
 
       if (res && (res.status === 'Success' || res.status === 200 || res.success || res.error === '0')) {

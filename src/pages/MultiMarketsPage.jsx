@@ -121,9 +121,9 @@ function MultiMarketsPage() {
             <Link className="sideNav__item sideNav__item--link" to="/cricket">Cricket</Link>
             <Link className="sideNav__item sideNav__item--link" to="/football">Football</Link>
             <Link className="sideNav__item sideNav__item--link" to="/tennis">Tennis</Link>
-            <Link className="sideNav__item sideNav__item--link" to="/e-football">Football</Link>
+            <Link className="sideNav__item sideNav__item--link" to="/horse-racing">Horse Racing</Link>
+            <Link className="sideNav__item sideNav__item--link" to="/greyhound-racing">Greyhound Racing</Link>
             <a className="sideNav__item sideNav__item--link" href="#">Fancybet</a>
-            <a className="sideNav__item sideNav__item--link" href="#">Horse Racing</a>
             <a className="sideNav__item sideNav__item--link" href="#">Election</a>
           </div>
         </aside>

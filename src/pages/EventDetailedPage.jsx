@@ -127,14 +127,15 @@ const EventDetailedPage = () => {
     }
   }, [matchId, isLoggedIn, loginToken]);
 
-  const handleBetClick = (runner, type, price, market = 'Match Odds', runnerIndex, marketData) => {
+  const handleBetClick = (runner, type, price, market = 'Match Odds', runnerIndex, marketData, selectionId) => {
     setSelectedBet({
       runner,
       type,
       price,
       market,
       runnerIndex,
-      marketData
+      marketData,
+      selectionId
     });
   };
 
@@ -221,7 +222,8 @@ const EventDetailedPage = () => {
                           liveRates={liveRates}
                           selectedBet={selectedBet}
                           onCancelBet={() => setSelectedBet(null)}
-                          onBetClick={(runner, side, price, runnerIndex) => handleBetClick(runner, side, price, market.name, runnerIndex, market)}
+                          onBetClick={(runner, side, price, runnerIndex, selectionId) => handleBetClick(runner, side, price, market.name, runnerIndex, market, selectionId)}
+                          sport={sport}
                         />
                       );
                     }
@@ -249,7 +251,8 @@ const EventDetailedPage = () => {
                         liveRates={liveRates}
                         selectedBet={selectedBet}
                         onCancelBet={() => setSelectedBet(null)}
-                        onBetClick={(runner, side, price, runnerIndex) => handleBetClick(runner, side, price, market.name, runnerIndex, market)}
+                        onBetClick={(runner, side, price, runnerIndex, selectionId) => handleBetClick(runner, side, price, market.name, runnerIndex, market, selectionId)}
+                        sport={sport}
                       />
                     );
                   })}

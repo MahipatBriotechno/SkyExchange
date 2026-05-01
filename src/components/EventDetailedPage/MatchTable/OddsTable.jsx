@@ -2,7 +2,7 @@ import React from 'react';
 import { getRunnerRates, getMarketStatus } from '../../../utils/rateRefiner';
 import InlineBetBox from './InlineBetBox';
 
-const OddsTable = ({ marketData, onBetClick, marketName, liveRates = {}, selectedBet, onCancelBet }) => {
+const OddsTable = ({ marketData, onBetClick, marketName, liveRates = {}, selectedBet, onCancelBet, sport }) => {
   const displayName = marketData?.name || marketName || 'Match Odds';
   const oddsWidth = '114.688px';
   const uniformHeight = '35px';
@@ -222,37 +222,37 @@ const OddsTable = ({ marketData, onBetClick, marketName, liveRates = {}, selecte
                   <td colSpan={6} style={{ padding: 0, position: 'relative' }}>
                     <div style={{ display: 'flex', width: '100%', height: uniformHeight }}>
                       {/* Back 3 */}
-                      <div style={cellStyle('#e2f2fe')} onClick={() => !isSuspended && onBetClick(runner.RunnerName, 'back', rates?.back?.p3, idx)}>
+                      <div style={cellStyle('#e2f2fe')} onClick={() => !isSuspended && onBetClick(runner.RunnerName, 'back', rates?.back?.p3, idx, runnerId)}>
                         <div style={{ fontWeight: '700' }}>{rates?.back?.p3 || '-'}</div>
                         <div style={{ fontSize: '10px', color: '#707c8a' }}>{rates?.back?.v3 || '-'}</div>
                       </div>
 
                       {/* Back 2 */}
-                      <div style={cellStyle('#add8f4')} onClick={() => !isSuspended && onBetClick(runner.RunnerName, 'back', rates?.back?.p2, idx)}>
+                      <div style={cellStyle('#add8f4')} onClick={() => !isSuspended && onBetClick(runner.RunnerName, 'back', rates?.back?.p2, idx, runnerId)}>
                         <div style={{ fontWeight: '700' }}>{rates?.back?.p2 || '-'}</div>
                         <div style={{ fontSize: '10px', color: '#707c8a' }}>{rates?.back?.v2 || '-'}</div>
                       </div>
 
                       {/* Back 1 */}
-                      <div style={cellStyle('#72bbef')} onClick={() => !isSuspended && onBetClick(runner.RunnerName, 'back', rates?.back?.p1, idx)}>
+                      <div style={cellStyle('#72bbef')} onClick={() => !isSuspended && onBetClick(runner.RunnerName, 'back', rates?.back?.p1, idx, runnerId)}>
                         <div style={{ fontWeight: '700' }}>{rates?.back?.p1 || '-'}</div>
                         <div style={{ fontSize: '10px' }}>{rates?.back?.v1 || '-'}</div>
                       </div>
 
                       {/* Lay 1 */}
-                      <div style={cellStyle('#faa9ba')} onClick={() => !isSuspended && onBetClick(runner.RunnerName, 'lay', rates?.lay?.p1, idx)}>
+                      <div style={cellStyle('#faa9ba')} onClick={() => !isSuspended && onBetClick(runner.RunnerName, 'lay', rates?.lay?.p1, idx, runnerId)}>
                         <div style={{ fontWeight: '700' }}>{rates?.lay?.p1 || '-'}</div>
                         <div style={{ fontSize: '10px' }}>{rates?.lay?.v1 || '-'}</div>
                       </div>
 
                       {/* Lay 2 */}
-                      <div style={cellStyle('#fbcbd5')} onClick={() => !isSuspended && onBetClick(runner.RunnerName, 'lay', rates?.lay?.p2, idx)}>
+                      <div style={cellStyle('#fbcbd5')} onClick={() => !isSuspended && onBetClick(runner.RunnerName, 'lay', rates?.lay?.p2, idx, runnerId)}>
                         <div style={{ fontWeight: '700' }}>{rates?.lay?.p2 || '-'}</div>
                         <div style={{ fontSize: '10px', color: '#707c8a' }}>{rates?.lay?.v2 || '-'}</div>
                       </div>
 
                       {/* Lay 3 */}
-                      <div style={{ ...cellStyle('#fde4ea'), borderRight: 'none' }} onClick={() => !isSuspended && onBetClick(runner.RunnerName, 'lay', rates?.lay?.p3, idx)}>
+                      <div style={{ ...cellStyle('#fde4ea'), borderRight: 'none' }} onClick={() => !isSuspended && onBetClick(runner.RunnerName, 'lay', rates?.lay?.p3, idx, runnerId)}>
                         <div style={{ fontWeight: '700' }}>{rates?.lay?.p3 || '-'}</div>
                         <div style={{ fontSize: '10px', color: '#707c8a' }}>{rates?.lay?.v3 || '-'}</div>
                       </div>
@@ -275,6 +275,7 @@ const OddsTable = ({ marketData, onBetClick, marketName, liveRates = {}, selecte
                         selection={selectedBet}
                         matchId={marketId}
                         onCancel={onCancelBet}
+                        sport={sport}
                       />
                     </td>
                   </tr>
